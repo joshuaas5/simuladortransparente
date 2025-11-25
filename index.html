@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custo Real Auto | Simulação 100% Privada</title>
+    <meta name="description" content="Simulador gratuito de financiamento de veículos vs consórcio. Compare taxas de juros reais de bancos (Itaú, Santander, Bradesco) e administradoras (Mycon, Rodobens) sem deixar seus dados.">
+    <title>Custo Real Auto | Simulação de Financiamento e Consórcio</title>
     
+    <!-- GOOGLE ADSENSE (Script Oficial) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4642150915962893"
+     crossorigin="anonymous"></script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -54,16 +59,25 @@
         .shake-alert {
             animation: shake 0.3s;
         }
+        
+        /* Área de Anúncio Responsiva */
+        .ad-slot {
+            width: 100%;
+            min-height: 100px;
+            background-color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            font-size: 10px;
+            color: #666;
+            border: 1px dashed #ccc;
+        }
 
         @media print {
             @page { margin: 1.5cm; size: portrait; }
-            body { 
-                background-color: white !important; 
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact;
-                font-size: 12pt;
-            }
-            .no-print, header button, header p.tracking-widest, .print-hidden { display: none !important; }
+            body { background-color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 12pt; }
+            .no-print, header button, header p.tracking-widest, .print-hidden, .ad-slot { display: none !important; }
             .print-only { display: block !important; }
             .neo-shadow, .neo-shadow-sm { box-shadow: none !important; }
             .border-4 { border-width: 1px !important; border-color: #ccc !important; }
@@ -83,7 +97,7 @@
     <script type="text/babel" data-type="module">
         import React, { useState, useEffect } from 'react';
         import ReactDOM from 'react-dom/client';
-        import { UserX, AlertTriangle, Info, ChevronDown, ChevronUp, Swords, Crown, Wallet, TrendingDown, Building2, Download, Calendar, BarChart3, Ban } from 'lucide-react';
+        import { UserX, AlertTriangle, Info, ChevronDown, ChevronUp, Swords, Crown, Wallet, TrendingDown, Building2, Download, Calendar, BarChart3, Ban, CheckCircle2 } from 'lucide-react';
 
         // --- COMPONENTES ---
 
@@ -129,6 +143,57 @@
                     <ChevronDown size={20} strokeWidth={3} />
                 </div>
                 </div>
+            </div>
+        );
+
+        // --- COMPONENTE DE CONTEÚDO SEO (Para Aprovação AdSense) ---
+        const SeoContent = () => (
+            <div className="mt-12 max-w-4xl mx-auto text-gray-700 no-print px-4">
+                <div className="ad-slot">Espaço Publicitário (Google AdSense)</div>
+                
+                <h2 className="text-2xl font-black mb-4 text-black">Entenda os Custos do seu Carro</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 className="font-bold text-lg mb-2 text-emerald-800">Consórcio: Vale a pena?</h3>
+                        <p className="text-sm mb-4 leading-relaxed">
+                            O consórcio é ideal para quem não tem pressa. A grande vantagem é a ausência de juros compostos; você paga uma Taxa de Administração fixa sobre o valor da carta.
+                            O <strong>Lance Embutido</strong> é uma estratégia inteligente onde você usa parte da própria carta para ofertar um lance, acelerando a contemplação sem descapitalizar.
+                        </p>
+                        <p className="text-sm mb-4 leading-relaxed">
+                            <strong>Atenção:</strong> A taxa de administração incide sobre o valor total da carta, mesmo que você use o lance embutido. Nosso simulador mostra exatamente esse custo "escondido".
+                        </p>
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-lg mb-2 text-blue-800">Financiamento: Imediato e Caro</h3>
+                        <p className="text-sm mb-4 leading-relaxed">
+                            O financiamento é a solução para quem precisa do carro "pra ontem". O custo é composto pelos juros mensais + IOF + Taxas bancárias (TAC, Gravame).
+                        </p>
+                        <ul className="text-sm list-disc list-inside space-y-1">
+                            <li><strong>Taxa Nominal:</strong> O juro que o banco anuncia.</li>
+                            <li><strong>CET (Custo Efetivo Total):</strong> O juro real somado às taxas. É esse que você deve comparar.</li>
+                            <li><strong>Amortização:</strong> Antecipar parcelas elimina os juros futuros, gerando um desconto massivo.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="mt-8 border-t pt-8">
+                    <h3 className="text-xl font-black mb-4 text-black">Perguntas Frequentes</h3>
+                    <details className="mb-2 bg-white p-4 border-2 border-gray-200 rounded cursor-pointer">
+                        <summary className="font-bold">O que é Lance Embutido?</summary>
+                        <p className="text-sm mt-2 text-gray-600">É quando você utiliza uma parte do valor da carta de crédito para pagar o lance. Você recebe um valor menor na mão (Carta - Lance), mas aumenta suas chances de contemplação sem tirar dinheiro do bolso.</p>
+                    </details>
+                    <details className="mb-2 bg-white p-4 border-2 border-gray-200 rounded cursor-pointer">
+                        <summary className="font-bold">Qual a diferença entre Juros e Taxa de Administração?</summary>
+                        <p className="text-sm mt-2 text-gray-600">Juros (Financiamento) são cobrados sobre o saldo devedor e compostos com o tempo. Taxa de Administração (Consórcio) é um percentual fixo cobrado sobre o valor total da carta para gerir o grupo.</p>
+                    </details>
+                    <details className="bg-white p-4 border-2 border-gray-200 rounded cursor-pointer">
+                        <summary className="font-bold">Este site é seguro?</summary>
+                        <p className="text-sm mt-2 text-gray-600">Sim. O Custo Real Auto roda diretamente no seu navegador. Nenhum dado que você digita é enviado para servidores ou salvo em banco de dados. Sua privacidade é 100% garantida.</p>
+                    </details>
+                </div>
+                
+                <div className="ad-slot">Espaço Publicitário (Google AdSense)</div>
             </div>
         );
 
@@ -204,11 +269,10 @@
                 setter(value === '' ? '' : parseFloat(value));
             };
 
-            // Validação de % Embutido (Trava 30%)
             const handleEmbutidoChange = (e) => {
                 const val = parseFloat(e.target.value);
                 if (val > 30) {
-                    alert("Ops! A maioria dos consórcios de automóveis (como Mycon, Santander, Itaú) limita o lance embutido a 30% (ou 25%). Valores acima disso não são realistas para esta modalidade.");
+                    alert("Ops! A maioria dos consórcios limita o lance embutido a 30%.");
                     setPercentualEmbutido(30);
                 } else {
                     setPercentualEmbutido(val);
@@ -259,7 +323,7 @@
             }, [consorcioSelecionado]);
 
 
-            // --- CÁLCULO GERAL INTELIGENTE ---
+            // --- CÁLCULO GERAL ---
             useEffect(() => {
                 const v = (val) => val === '' ? 0 : parseFloat(val);
 
@@ -269,7 +333,7 @@
                     setGlobalError('');
                 }
 
-                // 1. CÁLCULO FINANCIAMENTO
+                // 1. Financiamento
                 const custosExtras = v(tac) + v(gravame) + v(avaliacao) + v(seguroPrestamista);
                 const liquidoNecessario = v(valorVeiculo) - v(entrada); 
                 const principalFinanciado = liquidoNecessario + custosExtras;
@@ -286,7 +350,7 @@
                 const custoTotalFinan = v(entrada) + totalParcelasFinan;
                 const cetAnual = (Math.pow((1 + i), 12) - 1) * 100;
 
-                // 2. CÁLCULO CONSÓRCIO
+                // 2. Consórcio
                 let objetivoLiquidoDaCarta = v(valorVeiculo); 
                 if (!usarEntradaComoLance) {
                     objetivoLiquidoDaCarta = v(valorVeiculo) - v(entrada);
@@ -308,7 +372,6 @@
 
                 let chanceLabel = "Baixa (Sorteio)";
                 let chanceColor = "bg-red-100 text-red-800 border-red-300";
-
                 if (percentualTotalLance >= 55) {
                     chanceLabel = "Muito Alta";
                     chanceColor = "bg-green-100 text-green-800 border-green-300";
@@ -359,21 +422,13 @@
                 setResultado({
                     financiamento: { parcela: parcFinan, totalParcelas: totalParcelasFinan, custoTotalAquisicao: custoTotalFinan, totalJuros: custoTotalFinan - v(valorVeiculo), cetAnual: cetAnual },
                     consorcio: { 
-                        cartaNecessaria: cartaNecessaria, 
-                        parcelaCheia: parcConsorcioCheia, 
-                        parcelaPosLance: parcelaPosLance, 
-                        prazoPosLance: prazoPosLance, 
-                        custoTotalAquisicao: custoFinalConsorcio, 
-                        economia: custoTotalFinan - custoFinalConsorcio, 
-                        lanceEmbutidoValor: lanceEmbutidoValor, 
-                        lanceLivreValor: lanceLivreValor, 
-                        totalLance: totalLance, 
-                        percentualTotalLance: percentualTotalLance, 
-                        taxaAdmMoney: taxaAdmMoney, 
-                        fundoMoney: fundoMoney, 
-                        pctReducao: pctReducao,
-                        chanceLabel: chanceLabel,
-                        chanceColor: chanceColor
+                        cartaNecessaria: cartaNecessaria, parcelaCheia: parcConsorcioCheia, 
+                        parcelaPosLance: parcelaPosLance, prazoPosLance: prazoPosLance, 
+                        custoTotalAquisicao: custoFinalConsorcio, economia: custoTotalFinan - custoFinalConsorcio, 
+                        lanceEmbutidoValor: lanceEmbutidoValor, lanceLivreValor: lanceLivreValor, 
+                        totalLance: totalLance, percentualTotalLance: percentualTotalLance, 
+                        taxaAdmMoney: taxaAdmMoney, fundoMoney: fundoMoney, pctReducao: pctReducao,
+                        chanceLabel: chanceLabel, chanceColor: chanceColor
                     }
                 });
 
@@ -391,7 +446,6 @@
 
             const economia = resultado.consorcio.economia;
             const valorDiferenca = Math.abs(economia);
-
 
             return (
                 <div className="min-h-screen pb-20 overflow-x-hidden selection:bg-yellow-400 selection:text-black">
@@ -460,7 +514,6 @@
                                 Usado/Seminovo
                             </button>
                         </div>
-                        {/* Exibição do tipo para impressão */}
                         <div className="print-only text-sm font-bold mb-2 uppercase border-b border-gray-300 pb-1">
                             Tipo: {tipoVeiculo === 'novo' ? 'Carro 0km' : 'Seminovo/Usado'}
                         </div>
@@ -762,6 +815,9 @@
                                 Seu CET real sempre será definido pelo seu perfil de crédito e contrato.
                             </p>
                         </footer>
+                        
+                        {/* Conteúdo SEO + Ads */}
+                        <SeoContent />
 
                     </div>
                 </main>
