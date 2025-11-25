@@ -20,7 +20,7 @@
                         foreground: "hsl(var(--foreground))",
                     },
                     screens: {
-                        'print': {'raw': 'print'}, // Habilita breakpoint 'print:'
+                        'print': {'raw': 'print'},
                     }
                 }
             }
@@ -46,7 +46,6 @@
         .neo-shadow { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
         .neo-shadow-sm { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
         
-        /* Animação de Alerta */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -56,7 +55,6 @@
             animation: shake 0.3s;
         }
 
-        /* ESTILOS DE IMPRESSÃO (PDF) */
         @media print {
             @page { margin: 1.5cm; size: portrait; }
             body { 
@@ -65,74 +63,18 @@
                 print-color-adjust: exact;
                 font-size: 12pt;
             }
-            
-            /* Esconde elementos de navegação e botões */
-            .no-print, header button, header p.tracking-widest, .print-hidden {
-                display: none !important;
-            }
-
-            /* Mostra cabeçalho do relatório */
-            .print-only {
-                display: block !important;
-            }
-
-            /* Remove sombras e bordas grossas para visual limpo */
-            .neo-shadow, .neo-shadow-sm {
-                box-shadow: none !important;
-            }
-            
-            .border-4 {
-                border-width: 1px !important;
-                border-color: #ccc !important;
-            }
-
-            /* Ajusta layout para A4 */
-            main {
-                display: block !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                max-width: 100% !important;
-            }
-            
-            /* Evita quebra de cards no meio */
-            .break-inside-avoid {
-                break-inside: avoid;
-            }
-
-            /* Transforma inputs em texto estático */
-            input, select {
-                border: none !important;
-                background: transparent !important;
-                padding: 0 !important;
-                font-weight: bold;
-                color: #000 !important;
-                appearance: none; /* Remove seta do select */
-            }
-            
-            /* Remove fundos coloridos dos inputs para economizar tinta, exceto cards principais */
-            .input-container {
-                background: transparent !important;
-                border: none !important;
-                border-bottom: 1px dotted #ccc !important; /* Linha de guia */
-                margin-bottom: 5px !important;
-            }
-
-            /* Header simplificado na impressão */
-            header {
-                border: none !important;
-                box-shadow: none !important;
-                padding-bottom: 0 !important;
-                margin-bottom: 20px !important;
-            }
-            header h1 {
-                color: black !important;
-                font-size: 24pt !important;
-            }
+            .no-print, header button, header p.tracking-widest, .print-hidden { display: none !important; }
+            .print-only { display: block !important; }
+            .neo-shadow, .neo-shadow-sm { box-shadow: none !important; }
+            .border-4 { border-width: 1px !important; border-color: #ccc !important; }
+            main { display: block !important; padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+            .break-inside-avoid { break-inside: avoid; }
+            input, select { border: none !important; background: transparent !important; padding: 0 !important; font-weight: bold; color: #000 !important; appearance: none; }
+            .input-container { background: transparent !important; border: none !important; border-bottom: 1px dotted #ccc !important; margin-bottom: 5px !important; }
+            header { border: none !important; box-shadow: none !important; padding-bottom: 0 !important; margin-bottom: 20px !important; }
+            header h1 { color: black !important; font-size: 24pt !important; }
         }
-
-        .print-only {
-            display: none;
-        }
+        .print-only { display: none; }
     </style>
 </head>
 <body>
@@ -141,7 +83,7 @@
     <script type="text/babel" data-type="module">
         import React, { useState, useEffect } from 'react';
         import ReactDOM from 'react-dom/client';
-        import { UserX, AlertTriangle, Info, ChevronDown, ChevronUp, Swords, Crown, Wallet, TrendingDown, Building2, Download, Calendar } from 'lucide-react';
+        import { UserX, AlertTriangle, Info, ChevronDown, ChevronUp, Swords, Crown, Wallet, TrendingDown, Building2, Download, Calendar, BarChart3, Ban } from 'lucide-react';
 
         // --- COMPONENTES ---
 
@@ -207,12 +149,12 @@
             };
 
             const TAXAS_CONSORCIO = {
-                'mycon': { nome: 'MYCON', adm: 9.99, fundo: 1.5, prazo: 180 }, 
+                'mycon': { nome: 'MYCON', adm: 9.99, fundo: 1.5, prazo: 80 }, 
                 'caixa_con': { nome: 'CAIXA CONSÓRCIOS', adm: 15.0, fundo: 1.0, prazo: 80 },
-                'bradesco_con': { nome: 'BRADESCO CONSÓRCIOS', adm: 14.5, fundo: 2.0, prazo: 100 },
-                'bancobrasil_con': { nome: 'BB CONSÓRCIOS', adm: 13.5, fundo: 2.5, prazo: 96 },
-                'itau_con': { nome: 'ITAÚ CONSÓRCIOS', adm: 14.0, fundo: 2.0, prazo: 90 }, 
-                'rodobens': { nome: 'RODOBENS', adm: 13.0, fundo: 1.5, prazo: 120 },
+                'bradesco_con': { nome: 'BRADESCO CONSÓRCIOS', adm: 14.5, fundo: 2.0, prazo: 72 },
+                'bancobrasil_con': { nome: 'BB CONSÓRCIOS', adm: 13.5, fundo: 2.5, prazo: 84 },
+                'itau_con': { nome: 'ITAÚ CONSÓRCIOS', adm: 14.0, fundo: 2.0, prazo: 80 }, 
+                'rodobens': { nome: 'RODOBENS', adm: 14.0, fundo: 1.5, prazo: 72 },
                 'porto': { nome: 'PORTO SEGURO', adm: 12.5, fundo: 2.0, prazo: 72 }, 
                 'hs': { nome: 'HS CONSÓRCIOS', adm: 18.0, fundo: 1.0, prazo: 70 }, 
                 'custom': { nome: 'PERSONALIZADO', adm: 11.5, fundo: 1.5, prazo: 80 }
@@ -228,6 +170,7 @@
             const [parcelas, setParcelas] = useState(48); 
             const [taxaJuros, setTaxaJuros] = useState(2.35); 
             const [jurosError, setJurosError] = useState(''); 
+            const [globalError, setGlobalError] = useState('');
 
             const [tac, setTac] = useState(950);
             const [gravame, setGravame] = useState(450);
@@ -236,17 +179,23 @@
 
             const [taxaAdmin, setTaxaAdmin] = useState(9.99); 
             const [fundoReserva, setFundoReserva] = useState(1.5);
-            const [prazoConsorcio, setPrazoConsorcio] = useState(180);
+            const [prazoConsorcio, setPrazoConsorcio] = useState(80);
             
             const [usarEntradaComoLance, setUsarEntradaComoLance] = useState(true);
             const [percentualEmbutido, setPercentualEmbutido] = useState(0);
             const [tipoAbatimento, setTipoAbatimento] = useState('parcela'); 
             
             const [mostrarCustosDetalhados, setMostrarCustosDetalhados] = useState(false);
+            const [mostrarDisclaimerConsorcio, setMostrarDisclaimerConsorcio] = useState(false);
             
             const [resultado, setResultado] = useState({
                 financiamento: { parcela: 0, totalParcelas: 0, custoTotalAquisicao: 0, totalJuros: 0, cetAnual: 0 },
-                consorcio: { cartaNecessaria: 0, parcelaCheia: 0, parcelaPosLance: 0, prazoPosLance: 0, custoTotalAquisicao: 0, economia: 0, lanceEmbutidoValor: 0, lanceLivreValor: 0, totalLance: 0, percentualTotalLance: 0, taxaAdmMoney: 0, fundoMoney: 0, pctReducao: 0 }
+                consorcio: { 
+                    cartaNecessaria: 0, parcelaCheia: 0, parcelaPosLance: 0, prazoPosLance: 0, 
+                    custoTotalAquisicao: 0, economia: 0, lanceEmbutidoValor: 0, lanceLivreValor: 0, 
+                    totalLance: 0, percentualTotalLance: 0, taxaAdmMoney: 0, fundoMoney: 0, pctReducao: 0,
+                    chanceLabel: '', chanceColor: '' 
+                }
             });
 
             // --- HANDLERS ---
@@ -255,10 +204,22 @@
                 setter(value === '' ? '' : parseFloat(value));
             };
 
+            // Validação de % Embutido (Trava 30%)
+            const handleEmbutidoChange = (e) => {
+                const val = parseFloat(e.target.value);
+                if (val > 30) {
+                    alert("Ops! A maioria dos consórcios de automóveis (como Mycon, Santander, Itaú) limita o lance embutido a 30% (ou 25%). Valores acima disso não são realistas para esta modalidade.");
+                    setPercentualEmbutido(30);
+                } else {
+                    setPercentualEmbutido(val);
+                }
+            };
+
             const handleJurosChange = (e) => {
                 const input = e.target.value;
                 const taxa = parseFloat(input);
                 setTaxaJuros(taxa);
+
                 if (input !== '' && (taxa > 3.5 || taxa < 0.8)) {
                     setJurosError('Taxa fora do padrão de mercado (0.8% a 3.5% a.m.). Revise sua negociação.');
                 } else {
@@ -298,9 +259,17 @@
             }, [consorcioSelecionado]);
 
 
-            // --- CÁLCULO GERAL ---
+            // --- CÁLCULO GERAL INTELIGENTE ---
             useEffect(() => {
                 const v = (val) => val === '' ? 0 : parseFloat(val);
+
+                if (v(entrada) >= v(valorVeiculo) && v(valorVeiculo) > 0) {
+                    setGlobalError("Se você tem o valor total do carro na entrada, não pague juros nem taxas! Compre à vista e peça desconto.");
+                } else {
+                    setGlobalError('');
+                }
+
+                // 1. CÁLCULO FINANCIAMENTO
                 const custosExtras = v(tac) + v(gravame) + v(avaliacao) + v(seguroPrestamista);
                 const liquidoNecessario = v(valorVeiculo) - v(entrada); 
                 const principalFinanciado = liquidoNecessario + custosExtras;
@@ -317,7 +286,7 @@
                 const custoTotalFinan = v(entrada) + totalParcelasFinan;
                 const cetAnual = (Math.pow((1 + i), 12) - 1) * 100;
 
-                // Consórcio
+                // 2. CÁLCULO CONSÓRCIO
                 let objetivoLiquidoDaCarta = v(valorVeiculo); 
                 if (!usarEntradaComoLance) {
                     objetivoLiquidoDaCarta = v(valorVeiculo) - v(entrada);
@@ -325,14 +294,31 @@
 
                 const pctEmbutidoDecimal = v(percentualEmbutido) / 100;
                 let cartaNecessaria = objetivoLiquidoDaCarta;
-                if (pctEmbutidoDecimal < 1) {
-                    cartaNecessaria = objetivoLiquidoDaCarta / (1 - pctEmbutidoDecimal);
+                
+                if (pctEmbutidoDecimal >= 0.99) {
+                     cartaNecessaria = objetivoLiquidoDaCarta * 100; 
+                } else {
+                     cartaNecessaria = objetivoLiquidoDaCarta / (1 - pctEmbutidoDecimal);
                 }
 
                 const lanceEmbutidoValor = cartaNecessaria * pctEmbutidoDecimal;
                 const lanceLivreValor = usarEntradaComoLance ? v(entrada) : 0;
                 const totalLance = lanceEmbutidoValor + lanceLivreValor;
                 const percentualTotalLance = (totalLance / cartaNecessaria) * 100;
+
+                let chanceLabel = "Baixa (Sorteio)";
+                let chanceColor = "bg-red-100 text-red-800 border-red-300";
+
+                if (percentualTotalLance >= 55) {
+                    chanceLabel = "Muito Alta";
+                    chanceColor = "bg-green-100 text-green-800 border-green-300";
+                } else if (percentualTotalLance >= 40) {
+                    chanceLabel = "Alta";
+                    chanceColor = "bg-emerald-100 text-emerald-800 border-emerald-300";
+                } else if (percentualTotalLance >= 25) {
+                    chanceLabel = "Média";
+                    chanceColor = "bg-yellow-100 text-yellow-800 border-yellow-300";
+                }
 
                 const taxaAdmTotalDecimal = (v(taxaAdmin) + v(fundoReserva)) / 100;
                 const taxaAdmMoney = cartaNecessaria * (v(taxaAdmin) / 100); 
@@ -342,33 +328,53 @@
                 const parcConsorcioCheia = totalContratoConsorcio / v(prazoConsorcio);
 
                 const saldoDevedorAposLance = totalContratoConsorcio - totalLance;
+                
                 let parcelaPosLance = parcConsorcioCheia;
                 let prazoPosLance = v(prazoConsorcio);
                 let pctReducao = 0;
 
                 if (tipoAbatimento === 'parcela') {
                     if (v(prazoConsorcio) > 0) {
-                        parcelaPosLance = saldoDevedorAposLance / v(prazoConsorcio);
+                        const saldoFinal = Math.max(0, saldoDevedorAposLance);
+                        parcelaPosLance = saldoFinal / v(prazoConsorcio);
                         if (parcConsorcioCheia > 0) {
                             pctReducao = ((parcConsorcioCheia - parcelaPosLance) / parcConsorcioCheia) * 100;
                         }
                     }
                 } else {
                     if (parcConsorcioCheia > 0) {
-                        const mesesRestantes = Math.ceil(saldoDevedorAposLance / parcConsorcioCheia);
+                        const saldoFinal = Math.max(0, saldoDevedorAposLance);
+                        const mesesRestantes = Math.ceil(saldoFinal / parcConsorcioCheia);
                         prazoPosLance = mesesRestantes;
-                        if (saldoDevedorAposLance <= 0) {
+                        if (saldoFinal <= 0) {
                             prazoPosLance = 0;
                             parcelaPosLance = 0;
                         }
                     }
                 }
-
-                const custoTotalConsorcio = v(valorVeiculo) + taxaAdmMoney + fundoMoney;
+                
+                const custoTotalConsorcio = v(lanceLivreValor) + Math.max(0, saldoDevedorAposLance);
+                const custoFinalConsorcio = !usarEntradaComoLance ? (custoTotalConsorcio + v(entrada)) : custoTotalConsorcio;
 
                 setResultado({
                     financiamento: { parcela: parcFinan, totalParcelas: totalParcelasFinan, custoTotalAquisicao: custoTotalFinan, totalJuros: custoTotalFinan - v(valorVeiculo), cetAnual: cetAnual },
-                    consorcio: { cartaNecessaria: cartaNecessaria, parcelaCheia: parcConsorcioCheia, parcelaPosLance: parcelaPosLance, prazoPosLance: prazoPosLance, custoTotalAquisicao: custoTotalConsorcio, economia: custoTotalFinan - custoTotalConsorcio, lanceEmbutidoValor: lanceEmbutidoValor, lanceLivreValor: lanceLivreValor, totalLance: totalLance, percentualTotalLance: percentualTotalLance, taxaAdmMoney: taxaAdmMoney, fundoMoney: fundoMoney, pctReducao: pctReducao }
+                    consorcio: { 
+                        cartaNecessaria: cartaNecessaria, 
+                        parcelaCheia: parcConsorcioCheia, 
+                        parcelaPosLance: parcelaPosLance, 
+                        prazoPosLance: prazoPosLance, 
+                        custoTotalAquisicao: custoFinalConsorcio, 
+                        economia: custoTotalFinan - custoFinalConsorcio, 
+                        lanceEmbutidoValor: lanceEmbutidoValor, 
+                        lanceLivreValor: lanceLivreValor, 
+                        totalLance: totalLance, 
+                        percentualTotalLance: percentualTotalLance, 
+                        taxaAdmMoney: taxaAdmMoney, 
+                        fundoMoney: fundoMoney, 
+                        pctReducao: pctReducao,
+                        chanceLabel: chanceLabel,
+                        chanceColor: chanceColor
+                    }
                 });
 
             }, [valorVeiculo, entrada, parcelas, taxaJuros, tac, gravame, avaliacao, seguroPrestamista, taxaAdmin, fundoReserva, prazoConsorcio, percentualEmbutido, usarEntradaComoLance, tipoAbatimento, consorcioSelecionado]);
@@ -390,7 +396,6 @@
             return (
                 <div className="min-h-screen pb-20 overflow-x-hidden selection:bg-yellow-400 selection:text-black">
                 
-                {/* CABEÇALHO DE TELA */}
                 <header className="bg-white border-b-4 border-black p-4 md:p-6 sticky top-0 z-50 neo-shadow-sm">
                     <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -408,17 +413,8 @@
                     </div>
                     </div>
                 </header>
-
-                {/* CABEÇALHO APENAS IMPRESSÃO */}
-                <div className="print-only mb-8 border-b-2 border-black pb-4">
-                    <h1 className="text-3xl font-black uppercase">Relatório de Simulação Financeira</h1>
-                    <p className="text-sm text-gray-600 flex items-center gap-2 mt-1">
-                        <Calendar size={14}/> Gerado em: {new Date().toLocaleString()}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-2">Simulação anônima gerada via Custo Real Auto.</p>
-                </div>
                 
-                {/* AVISO DE PRIVACIDADE (Tela) */}
+                {/* AVISO DE PRIVACIDADE */}
                 <div className="max-w-7xl mx-auto p-4 md:p-6 no-print">
                     <div className="bg-white border-4 border-black p-4 neo-shadow-sm text-center">
                         <p className="text-xs font-bold text-gray-800">
@@ -427,6 +423,16 @@
                         </p>
                     </div>
                 </div>
+
+                {/* ALERTA GLOBAL INTELIGENTE */}
+                {globalError && (
+                    <div className="max-w-7xl mx-auto px-4 md:px-6 mb-4">
+                         <div className="bg-red-500 text-white font-black p-4 border-4 border-black shadow-lg flex items-center gap-3">
+                            <Ban size={24} />
+                            <span>{globalError}</span>
+                         </div>
+                    </div>
+                )}
 
                 <main className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 mt-4">
                     
@@ -505,7 +511,6 @@
                                     </>
                                 )}
                             </div>
-                            {/* Mostra taxas extras no print apenas como valor somado */}
                             <div className="print-only text-xs text-gray-500 mt-1">
                                 + R$ {(tac + gravame + avaliacao + seguroPrestamista).toFixed(2)} em taxas (TAC/Gravame/Etc)
                             </div>
@@ -549,7 +554,7 @@
                             />
                         </div>
 
-                        {/* LANCES */}
+                        {/* LANCES INTELIGENTES */}
                         <div className="bg-yellow-200 border-4 border-black p-4 mt-4 relative print:bg-white print:border-0 print:p-0">
                             <div className="absolute -top-3 -right-3 bg-red-600 text-white text-xs font-black px-2 py-1 rotate-3 border-2 border-black shadow-sm no-print">
                                 ESTRATÉGIA DE LANCE
@@ -574,7 +579,7 @@
                             label="Lance Embutido (%)" 
                             prefix="%" 
                             value={percentualEmbutido} 
-                            onChange={handleInput(setPercentualEmbutido)} 
+                            onChange={handleEmbutidoChange} 
                         />
                         
                         <div className="mt-4 pt-4 border-t-2 border-black border-dashed">
@@ -686,7 +691,10 @@
                                     {/* RAIO-X LANCE */}
                                     {resultado.consorcio.totalLance > 0 && (
                                         <div className="bg-white p-2 border-2 border-emerald-200 rounded text-xs space-y-1 print:border-black">
-                                            <p className="font-black text-emerald-800 uppercase text-center border-b pb-1">Lance Aplicado: {formatarPorcentagem(resultado.consorcio.percentualTotalLance)}</p>
+                                            <div className={`text-center font-black uppercase border-b pb-1 mb-1 ${resultado.consorcio.chanceColor} rounded-sm flex items-center justify-center gap-1`}>
+                                                <BarChart3 size={12}/> Chance: {resultado.consorcio.chanceLabel} ({formatarPorcentagem(resultado.consorcio.percentualTotalLance)})
+                                            </div>
+
                                             <div className="flex justify-between">
                                                 <span>Livre (Entrada):</span>
                                                 <span>{formatarMoeda(resultado.consorcio.lanceLivreValor)}</span>
