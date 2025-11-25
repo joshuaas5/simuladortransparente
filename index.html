@@ -18,6 +18,9 @@
                         ring: "hsl(var(--ring))",
                         background: "hsl(var(--background))",
                         foreground: "hsl(var(--foreground))",
+                    },
+                    screens: {
+                        'print': {'raw': 'print'}, // Habilita breakpoint 'print:'
                     }
                 }
             }
@@ -42,7 +45,8 @@
         body { background-color: #F3F4F6; font-family: sans-serif; }
         .neo-shadow { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
         .neo-shadow-sm { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
-        /* Adiciona a animação de alerta */
+        
+        /* Animação de Alerta */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -51,21 +55,83 @@
         .shake-alert {
             animation: shake 0.3s;
         }
-        /* Oculta o botão de download na versão impressa */
+
+        /* ESTILOS DE IMPRESSÃO (PDF) */
         @media print {
-            .no-print {
-                display: none;
+            @page { margin: 1.5cm; size: portrait; }
+            body { 
+                background-color: white !important; 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+                font-size: 12pt;
             }
+            
+            /* Esconde elementos de navegação e botões */
+            .no-print, header button, header p.tracking-widest, .print-hidden {
+                display: none !important;
+            }
+
+            /* Mostra cabeçalho do relatório */
+            .print-only {
+                display: block !important;
+            }
+
+            /* Remove sombras e bordas grossas para visual limpo */
+            .neo-shadow, .neo-shadow-sm {
+                box-shadow: none !important;
+            }
+            
+            .border-4 {
+                border-width: 1px !important;
+                border-color: #ccc !important;
+            }
+
+            /* Ajusta layout para A4 */
             main {
-                /* Garante que o conteúdo não seja cortado */
-                max-width: 100%;
-                margin: 0;
-                padding: 0;
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
             }
-            .neo-shadow {
-                /* Remove as sombras no PDF para economizar tinta */
-                box-shadow: none;
+            
+            /* Evita quebra de cards no meio */
+            .break-inside-avoid {
+                break-inside: avoid;
             }
+
+            /* Transforma inputs em texto estático */
+            input, select {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                font-weight: bold;
+                color: #000 !important;
+                appearance: none; /* Remove seta do select */
+            }
+            
+            /* Remove fundos coloridos dos inputs para economizar tinta, exceto cards principais */
+            .input-container {
+                background: transparent !important;
+                border: none !important;
+                border-bottom: 1px dotted #ccc !important; /* Linha de guia */
+                margin-bottom: 5px !important;
+            }
+
+            /* Header simplificado na impressão */
+            header {
+                border: none !important;
+                box-shadow: none !important;
+                padding-bottom: 0 !important;
+                margin-bottom: 20px !important;
+            }
+            header h1 {
+                color: black !important;
+                font-size: 24pt !important;
+            }
+        }
+
+        .print-only {
+            display: none;
         }
     </style>
 </head>
@@ -75,32 +141,32 @@
     <script type="text/babel" data-type="module">
         import React, { useState, useEffect } from 'react';
         import ReactDOM from 'react-dom/client';
-        import { UserX, AlertTriangle, Info, ChevronDown, ChevronUp, Swords, Crown, Wallet, TrendingDown, Building2, Download } from 'lucide-react';
+        import { UserX, AlertTriangle, Info, ChevronDown, ChevronUp, Swords, Crown, Wallet, TrendingDown, Building2, Download, Calendar } from 'lucide-react';
 
         // --- COMPONENTES ---
 
         const NeoCard = ({ children, className = "", color = "bg-white" }) => (
-            <div className={`border-4 border-black neo-shadow ${color} p-6 ${className} transition-transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]`}>
+            <div className={`border-4 border-black neo-shadow ${color} p-5 md:p-6 ${className} transition-transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] break-inside-avoid print:hover:translate-y-0 print:hover:shadow-none`}>
                 {children}
             </div>
         );
 
         const NeoInput = ({ label, value, onChange, prefix, suffix, type="number", helper, error, alert }) => (
             <div className="mb-4">
-                <label className="block font-black text-black mb-1 uppercase tracking-tighter text-sm flex justify-between items-center">
+                <label className="block font-black text-black mb-1 uppercase tracking-tighter text-xs md:text-sm flex justify-between items-center">
                 {label}
-                {helper && <span className="text-[10px] font-normal text-black bg-gray-200 px-1 border border-black">{helper}</span>}
+                {helper && <span className="text-[10px] font-normal text-black bg-gray-200 px-1 border border-black no-print">{helper}</span>}
                 </label>
-                <div className={`flex border-4 ${error ? 'border-red-500 bg-red-50 shake-alert' : 'border-black bg-white'} focus-within:bg-yellow-50 focus-within:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all`}>
-                {prefix && <span className="bg-black text-white font-bold p-3 flex items-center justify-center min-w-[3rem]">{prefix}</span>}
+                <div className={`input-container flex border-4 ${error ? 'border-red-500 bg-red-50 shake-alert' : 'border-black bg-white'} focus-within:bg-yellow-50 focus-within:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all`}>
+                {prefix && <span className="bg-black text-white font-bold p-2 md:p-3 flex items-center justify-center min-w-[2.5rem] md:min-w-[3rem] text-sm no-print">{prefix}</span>}
                 <input
                     type={type}
                     value={value}
                     onChange={onChange}
-                    className="w-full p-3 font-mono font-bold text-lg bg-transparent outline-none placeholder-gray-400"
+                    className="w-full p-2 md:p-3 font-mono font-bold text-base md:text-lg bg-transparent outline-none placeholder-gray-400"
                     placeholder="0"
                 />
-                {suffix && <span className="bg-gray-200 text-black font-bold p-3 flex items-center justify-center border-l-4 border-black">{suffix}</span>}
+                {suffix && <span className="bg-gray-200 text-black font-bold p-2 md:p-3 flex items-center justify-center border-l-4 border-black text-xs md:text-sm no-print">{suffix}</span>}
                 </div>
                 {error && <p className="text-xs text-red-600 font-bold mt-1 flex items-center gap-1"><AlertTriangle size={12}/>{error}</p>}
             </div>
@@ -108,24 +174,24 @@
 
         const NeoSelect = ({ label, value, onChange, options }) => (
             <div className="mb-4">
-                <label className="block font-black text-black mb-1 uppercase tracking-tighter text-sm">{label}</label>
-                <div className="relative border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all">
+                <label className="block font-black text-black mb-1 uppercase tracking-tighter text-xs md:text-sm">{label}</label>
+                <div className="input-container relative border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all">
                 <select
                     value={value}
                     onChange={onChange}
-                    className="w-full p-3 font-bold bg-transparent outline-none appearance-none uppercase cursor-pointer relative z-10"
+                    className="w-full p-2 md:p-3 font-bold bg-transparent outline-none appearance-none uppercase cursor-pointer relative z-10 text-sm md:text-base truncate pr-8"
                 >
                     {options}
                 </select>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 z-0 pointer-events-none">
-                    <ChevronDown size={24} strokeWidth={3} />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 z-0 pointer-events-none no-print">
+                    <ChevronDown size={20} strokeWidth={3} />
                 </div>
                 </div>
             </div>
         );
 
         const App = () => {
-            // --- DADOS BANCÁRIOS AJUSTADOS (Maior realismo para usados) ---
+            // --- DADOS ---
             const TAXAS_BANCOS = {
                 'media': { nome: 'MÉDIA GERAL', novo: 1.65, usado: 2.35 }, 
                 'bb': { nome: 'BANCO DO BRASIL', novo: 1.55, usado: 2.05 }, 
@@ -140,7 +206,6 @@
                 'pan': { nome: 'BANCO PAN', novo: 1.95, usado: 2.45 },
             };
 
-            // --- DADOS CONSÓRCIO (Taxa Adm Total + Fundo de Reserva - dados de mercado conservadores) ---
             const TAXAS_CONSORCIO = {
                 'mycon': { nome: 'MYCON', adm: 9.99, fundo: 1.5, prazo: 180 }, 
                 'caixa_con': { nome: 'CAIXA CONSÓRCIOS', adm: 15.0, fundo: 1.0, prazo: 80 },
@@ -153,7 +218,6 @@
                 'custom': { nome: 'PERSONALIZADO', adm: 11.5, fundo: 1.5, prazo: 80 }
             };
 
-
             // --- ESTADOS ---
             const [tipoVeiculo, setTipoVeiculo] = useState('usado'); 
             const [bancoSelecionado, setBancoSelecionado] = useState('media');
@@ -165,18 +229,15 @@
             const [taxaJuros, setTaxaJuros] = useState(2.35); 
             const [jurosError, setJurosError] = useState(''); 
 
-            // Custos Ocultos Financiamento
             const [tac, setTac] = useState(950);
             const [gravame, setGravame] = useState(450);
             const [avaliacao, setAvaliacao] = useState(400);
             const [seguroPrestamista, setSeguroPrestamista] = useState(0);
 
-            // Consórcio Configs
             const [taxaAdmin, setTaxaAdmin] = useState(9.99); 
             const [fundoReserva, setFundoReserva] = useState(1.5);
             const [prazoConsorcio, setPrazoConsorcio] = useState(180);
             
-            // Lances Consórcio
             const [usarEntradaComoLance, setUsarEntradaComoLance] = useState(true);
             const [percentualEmbutido, setPercentualEmbutido] = useState(0);
             const [tipoAbatimento, setTipoAbatimento] = useState('parcela'); 
@@ -198,7 +259,6 @@
                 const input = e.target.value;
                 const taxa = parseFloat(input);
                 setTaxaJuros(taxa);
-
                 if (input !== '' && (taxa > 3.5 || taxa < 0.8)) {
                     setJurosError('Taxa fora do padrão de mercado (0.8% a 3.5% a.m.). Revise sua negociação.');
                 } else {
@@ -223,13 +283,11 @@
                 setPrazoConsorcio(data.prazo);
             };
 
-            // Atualiza taxa ao mudar Tipo de Veículo
             useEffect(() => {
                 const novaTaxa = TAXAS_BANCOS[bancoSelecionado][tipoVeiculo];
                 setTaxaJuros(novaTaxa);
             }, [tipoVeiculo, bancoSelecionado]);
 
-            // Atualiza taxa Adm ao mudar a administradora (necessário para o campo personalizado)
             useEffect(() => {
                 if (consorcioSelecionado !== 'custom') {
                     const data = TAXAS_CONSORCIO[consorcioSelecionado];
@@ -243,8 +301,6 @@
             // --- CÁLCULO GERAL ---
             useEffect(() => {
                 const v = (val) => val === '' ? 0 : parseFloat(val);
-
-                // 1. CÁLCULO FINANCIAMENTO
                 const custosExtras = v(tac) + v(gravame) + v(avaliacao) + v(seguroPrestamista);
                 const liquidoNecessario = v(valorVeiculo) - v(entrada); 
                 const principalFinanciado = liquidoNecessario + custosExtras;
@@ -261,8 +317,7 @@
                 const custoTotalFinan = v(entrada) + totalParcelasFinan;
                 const cetAnual = (Math.pow((1 + i), 12) - 1) * 100;
 
-
-                // 2. CÁLCULO CONSÓRCIO
+                // Consórcio
                 let objetivoLiquidoDaCarta = v(valorVeiculo); 
                 if (!usarEntradaComoLance) {
                     objetivoLiquidoDaCarta = v(valorVeiculo) - v(entrada);
@@ -279,7 +334,6 @@
                 const totalLance = lanceEmbutidoValor + lanceLivreValor;
                 const percentualTotalLance = (totalLance / cartaNecessaria) * 100;
 
-                // Custo Consórcio
                 const taxaAdmTotalDecimal = (v(taxaAdmin) + v(fundoReserva)) / 100;
                 const taxaAdmMoney = cartaNecessaria * (v(taxaAdmin) / 100); 
                 const fundoMoney = cartaNecessaria * (v(fundoReserva) / 100);
@@ -287,9 +341,7 @@
                 const totalContratoConsorcio = cartaNecessaria * (1 + taxaAdmTotalDecimal);
                 const parcConsorcioCheia = totalContratoConsorcio / v(prazoConsorcio);
 
-                // === CÁLCULOS PÓS-LANCE ===
                 const saldoDevedorAposLance = totalContratoConsorcio - totalLance;
-
                 let parcelaPosLance = parcConsorcioCheia;
                 let prazoPosLance = v(prazoConsorcio);
                 let pctReducao = 0;
@@ -312,64 +364,25 @@
                     }
                 }
 
-                const custoTotalConsorcio = v(valorVeiculo) + taxaAdmMoney + fundoMoney; // Custo = Valor do Bem + Taxas Adm + Fundo (O que realmente sai do bolso)
+                const custoTotalConsorcio = v(valorVeiculo) + taxaAdmMoney + fundoMoney;
 
                 setResultado({
-                    financiamento: {
-                        parcela: parcFinan,
-                        totalParcelas: totalParcelasFinan,
-                        custoTotalAquisicao: custoTotalFinan,
-                        totalJuros: custoTotalFinan - v(valorVeiculo),
-                        cetAnual: cetAnual,
-                    },
-                    consorcio: {
-                        cartaNecessaria: cartaNecessaria,
-                        parcelaCheia: parcConsorcioCheia,
-                        parcelaPosLance: parcelaPosLance,
-                        prazoPosLance: prazoPosLance,
-                        custoTotalAquisicao: custoTotalConsorcio,
-                        economia: custoTotalFinan - custoTotalConsorcio,
-                        lanceEmbutidoValor: lanceEmbutidoValor,
-                        lanceLivreValor: lanceLivreValor,
-                        totalLance: totalLance,
-                        percentualTotalLance: percentualTotalLance,
-                        taxaAdmMoney: taxaAdmMoney,
-                        fundoMoney: fundoMoney,
-                        pctReducao: pctReducao
-                    }
+                    financiamento: { parcela: parcFinan, totalParcelas: totalParcelasFinan, custoTotalAquisicao: custoTotalFinan, totalJuros: custoTotalFinan - v(valorVeiculo), cetAnual: cetAnual },
+                    consorcio: { cartaNecessaria: cartaNecessaria, parcelaCheia: parcConsorcioCheia, parcelaPosLance: parcelaPosLance, prazoPosLance: prazoPosLance, custoTotalAquisicao: custoTotalConsorcio, economia: custoTotalFinan - custoTotalConsorcio, lanceEmbutidoValor: lanceEmbutidoValor, lanceLivreValor: lanceLivreValor, totalLance: totalLance, percentualTotalLance: percentualTotalLance, taxaAdmMoney: taxaAdmMoney, fundoMoney: fundoMoney, pctReducao: pctReducao }
                 });
 
             }, [valorVeiculo, entrada, parcelas, taxaJuros, tac, gravame, avaliacao, seguroPrestamista, taxaAdmin, fundoReserva, prazoConsorcio, percentualEmbutido, usarEntradaComoLance, tipoAbatimento, consorcioSelecionado]);
 
-            const formatarMoeda = (valor) => {
-                return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
-            };
-
-            const formatarPorcentagem = (valor) => {
-                return (valor || 0).toFixed(1) + '%';
-            };
-
-            const formatarCET = (valor) => {
-                return (valor || 0).toFixed(2) + '% a.a.';
-            };
+            const formatarMoeda = (valor) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
+            const formatarPorcentagem = (valor) => (valor || 0).toFixed(1) + '%';
+            const formatarCET = (valor) => (valor || 0).toFixed(2) + '% a.a.';
 
             const handleDownloadPDF = () => {
-                // Remove elementos de controle para impressão limpa
-                const controls = document.querySelectorAll('.no-print');
-                controls.forEach(el => el.style.display = 'none');
-
-                // Adiciona um título de relatório para a impressão
-                document.title = 'Relatório de Simulação - Custo Real Auto';
-
-                // Imprime a página (O navegador irá gerar o PDF)
+                document.title = `Relatório Custo Real - ${new Date().toLocaleDateString()}`;
                 window.print();
-
-                // Restaura a visualização
-                controls.forEach(el => el.style.display = 'block');
                 document.title = 'Custo Real Auto | Simulação 100% Privada';
             };
 
-            // Lógica para o card de Economia/Melhor Opção
             const economia = resultado.consorcio.economia;
             const valorDiferenca = Math.abs(economia);
 
@@ -377,26 +390,37 @@
             return (
                 <div className="min-h-screen pb-20 overflow-x-hidden selection:bg-yellow-400 selection:text-black">
                 
+                {/* CABEÇALHO DE TELA */}
                 <header className="bg-white border-b-4 border-black p-4 md:p-6 sticky top-0 z-50 neo-shadow-sm">
                     <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="bg-black text-white p-2 border-2 border-transparent hover:border-yellow-400 transition-colors">
-                            <Swords size={28} strokeWidth={3} />
+                            <Swords size={24} strokeWidth={3} />
                         </div>
                         <div>
-                            <h1 className="text-2xl md:text-4xl font-black uppercase tracking-tighter leading-none">
+                            <h1 className="text-xl md:text-4xl font-black uppercase tracking-tighter leading-none">
                             CUSTO <span className="bg-yellow-400 px-1">REAL</span> AUTO
                             </h1>
-                            <p className="text-sm font-extrabold uppercase tracking-widest text-black mt-1">
-                                <span className="text-emerald-700">100% PRIVADO.</span> RÁPIDO. SEM PEDIR SEUS DADOS.
+                            <p className="text-xs md:text-sm font-black uppercase tracking-widest text-black mt-1">
+                                <span className="text-emerald-700 font-extrabold">Simulação de Custo</span> | Rápida, Privada e Sem Pedir seus Dados.
                             </p>
                         </div>
                     </div>
                     </div>
                 </header>
+
+                {/* CABEÇALHO APENAS IMPRESSÃO */}
+                <div className="print-only mb-8 border-b-2 border-black pb-4">
+                    <h1 className="text-3xl font-black uppercase">Relatório de Simulação Financeira</h1>
+                    <p className="text-sm text-gray-600 flex items-center gap-2 mt-1">
+                        <Calendar size={14}/> Gerado em: {new Date().toLocaleString()}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-2">Simulação anônima gerada via Custo Real Auto.</p>
+                </div>
                 
-                <div className="max-w-7xl mx-auto p-4 md:p-6">
-                    <div className="bg-white border-4 border-black p-4 neo-shadow-sm text-center no-print">
+                {/* AVISO DE PRIVACIDADE (Tela) */}
+                <div className="max-w-7xl mx-auto p-4 md:p-6 no-print">
+                    <div className="bg-white border-4 border-black p-4 neo-shadow-sm text-center">
                         <p className="text-xs font-bold text-gray-800">
                             Esta ferramenta não retém e nem coleta dados pessoais. 
                             Use para comparar o custo real da aquisição de seu veículo sem ser incomodado por propostas de vendas.
@@ -404,11 +428,10 @@
                     </div>
                 </div>
 
-
                 <main className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 mt-4">
                     
-                    {/* ESQUERDA */}
-                    <div className="lg:col-span-5 space-y-6">
+                    {/* ESQUERDA (CONFIGURAÇÕES) */}
+                    <div className="lg:col-span-5 space-y-6 print:w-full print:mb-8">
                     
                     <NeoCard color="bg-white" className="relative">
                         <div className="flex items-center gap-2 mb-4 border-b-4 border-black pb-2">
@@ -417,7 +440,7 @@
                         </div>
 
                         {/* SELETOR NOVO/USADO */}
-                        <div className="flex gap-2 mb-4 p-1 bg-gray-100 border-2 border-black">
+                        <div className="flex gap-2 mb-4 p-1 bg-gray-100 border-2 border-black no-print">
                             <button 
                                 onClick={() => setTipoVeiculo('novo')}
                                 className={`flex-1 py-2 font-black uppercase text-xs transition-all ${tipoVeiculo === 'novo' ? 'bg-blue-600 text-white border-2 border-black shadow-sm' : 'text-gray-500 hover:bg-gray-200'}`}
@@ -431,9 +454,13 @@
                                 Usado/Seminovo
                             </button>
                         </div>
+                        {/* Exibição do tipo para impressão */}
+                        <div className="print-only text-sm font-bold mb-2 uppercase border-b border-gray-300 pb-1">
+                            Tipo: {tipoVeiculo === 'novo' ? 'Carro 0km' : 'Seminovo/Usado'}
+                        </div>
 
                         <NeoSelect 
-                            label="Instituição Financeira (Taxas Estimadas)"
+                            label="Instituição Financeira"
                             value={bancoSelecionado}
                             onChange={handleTrocaBanco}
                             options={Object.entries(TAXAS_BANCOS).map(([key, data]) => (
@@ -446,8 +473,8 @@
                             <NeoInput label="Sua Entrada" prefix="R$" value={entrada} onChange={handleInput(setEntrada)} />
                         </div>
 
-                        <div className="bg-blue-50 p-4 border-2 border-blue-100 mt-2">
-                            <p className="text-xs font-black uppercase text-blue-800 mb-2">Condições</p>
+                        <div className="bg-blue-50 p-4 border-2 border-blue-100 mt-2 print:bg-white print:border-0 print:p-0">
+                            <p className="text-xs font-black uppercase text-blue-800 mb-2 print:text-black">Condições</p>
                             <div className="grid grid-cols-2 gap-4">
                                 <NeoSelect
                                     label="Prazo"
@@ -463,28 +490,25 @@
                                     error={jurosError} 
                                 />
                             </div>
-                            {/* NOVO AVISO DE TRANSPARÊNCIA */}
-                            <div className="mt-4 p-2 bg-blue-100 border-2 border-blue-200 text-xs font-bold flex items-center gap-2">
-                                <Info size={14} className="text-blue-700 shrink-0"/>
-                                <span className="text-blue-900">
-                                    A taxa é uma média. O seu juro final dependerá do seu SCORE de crédito e do seu relacionamento com o banco.
-                                </span>
-                            </div>
-
-                            <button 
-                                onClick={() => setMostrarCustosDetalhados(!mostrarCustosDetalhados)}
-                                className="text-[10px] font-bold underline text-blue-600 mt-1"
-                            >
-                                {mostrarCustosDetalhados ? 'Ocultar' : 'Editar'} Taxas Extras (TAC/Gravame)
-                            </button>
-                            {mostrarCustosDetalhados && (
-                                <div className="mt-2 grid grid-cols-2 gap-2 animate-in fade-in">
+                            
+                            <div className="mt-2 grid grid-cols-2 gap-2 print:hidden">
+                                <button 
+                                    onClick={() => setMostrarCustosDetalhados(!mostrarCustosDetalhados)}
+                                    className="text-[10px] font-bold underline text-blue-600 mt-1 col-span-2 text-left"
+                                >
+                                    {mostrarCustosDetalhados ? 'Ocultar' : 'Editar'} Taxas Extras (TAC/Gravame)
+                                </button>
+                                {mostrarCustosDetalhados && (
+                                    <>
                                     <NeoInput label="TAC" prefix="R$" value={tac} onChange={handleInput(setTac)} />
                                     <NeoInput label="Gravame" prefix="R$" value={gravame} onChange={handleInput(setGravame)} />
-                                    <NeoInput label="Avaliação" prefix="R$" value={avaliacao} onChange={handleInput(setAvaliacao)} />
-                                    <NeoInput label="Seguro" prefix="R$" value={seguroPrestamista} onChange={handleInput(setSeguroPrestamista)} />
-                                </div>
-                            )}
+                                    </>
+                                )}
+                            </div>
+                            {/* Mostra taxas extras no print apenas como valor somado */}
+                            <div className="print-only text-xs text-gray-500 mt-1">
+                                + R$ {(tac + gravame + avaliacao + seguroPrestamista).toFixed(2)} em taxas (TAC/Gravame/Etc)
+                            </div>
                         </div>
                     </NeoCard>
 
@@ -504,23 +528,21 @@
                             })}
                         />
 
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-2 md:gap-4">
                             <NeoInput 
                                 label="Taxa Adm" 
                                 prefix="%" 
                                 value={taxaAdmin} 
                                 onChange={handleInput(setTaxaAdmin)} 
-                                helper="Remuneração da Adm"
                             />
                             <NeoInput 
-                                label="Fundo Reserva" 
+                                label="Fundo" 
                                 prefix="%" 
                                 value={fundoReserva} 
                                 onChange={handleInput(setFundoReserva)} 
-                                helper="Pode ser devolvido"
                             />
                             <NeoInput 
-                                label="Prazo Grupo" 
+                                label="Prazo" 
                                 prefix="Meses" 
                                 value={prazoConsorcio} 
                                 onChange={handleInput(setPrazoConsorcio)} 
@@ -528,21 +550,23 @@
                         </div>
 
                         {/* LANCES */}
-                        <div className="bg-yellow-200 border-4 border-black p-4 mt-4 relative">
-                            <div className="absolute -top-3 -right-3 bg-red-600 text-white font-black px-2 py-1 rotate-3 border-2 border-black shadow-sm">
+                        <div className="bg-yellow-200 border-4 border-black p-4 mt-4 relative print:bg-white print:border-0 print:p-0">
+                            <div className="absolute -top-3 -right-3 bg-red-600 text-white text-xs font-black px-2 py-1 rotate-3 border-2 border-black shadow-sm no-print">
                                 ESTRATÉGIA DE LANCE
                             </div>
+                            <div className="print-only font-black text-sm mb-2 uppercase">Estratégia de Lance</div>
                             
-                            <div className="flex items-center gap-2 mb-4 bg-white p-2 border-2 border-black">
+                            <div className="flex items-center gap-2 mb-4 bg-white p-2 border-2 border-black print:border-0 print:p-0">
                                 <input 
                                     type="checkbox" 
                                     id="usarEntrada" 
                                     checked={usarEntradaComoLance} 
                                     onChange={(e) => setUsarEntradaComoLance(e.target.checked)}
-                                    className="w-5 h-5 border-2 border-black accent-black cursor-pointer"
+                                    className="w-5 h-5 border-2 border-black accent-black cursor-pointer no-print"
                                 />
                                 <label htmlFor="usarEntrada" className="text-xs font-bold cursor-pointer leading-tight">
-                                    Usar "Entrada" ({formatarMoeda(entrada)}) como Lance?
+                                    <span className="no-print">Usar "Entrada" ({formatarMoeda(entrada)}) como Lance?</span>
+                                    <span className="print-only">Lance Livre (Entrada): {formatarMoeda(entrada)}</span>
                                 </label>
                             </div>
 
@@ -554,8 +578,8 @@
                         />
                         
                         <div className="mt-4 pt-4 border-t-2 border-black border-dashed">
-                            <p className="font-black text-xs uppercase mb-2">Se for contemplado, você prefere:</p>
-                            <div className="flex gap-2">
+                            <p className="font-black text-xs uppercase mb-2">Se for contemplado, prefiro:</p>
+                            <div className="flex gap-2 no-print">
                                 <button
                                     onClick={() => setTipoAbatimento('parcela')}
                                     className={`flex-1 p-2 text-xs font-black uppercase border-2 border-black transition-colors ${tipoAbatimento === 'parcela' ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'}`}
@@ -569,20 +593,23 @@
                                     Reduzir Prazo
                                 </button>
                             </div>
+                            <div className="print-only text-sm font-bold">
+                                Estratégia: {tipoAbatimento === 'parcela' ? 'Reduzir o valor da Parcela' : 'Reduzir o Prazo'}
+                            </div>
                         </div>
                         </div>
                     </NeoCard>
 
                     </div>
 
-                    {/* DIREITA */}
-                    <div className="lg:col-span-7 space-y-6">
+                    {/* DIREITA (RESULTADOS) */}
+                    <div className="lg:col-span-7 space-y-6 print:w-full">
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-auto items-stretch">
                             
                             {/* FINANCIAMENTO */}
                             <div className="bg-white border-4 border-black neo-shadow p-5 flex flex-col relative">
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white font-black px-4 py-1 border-2 border-black text-xs uppercase tracking-widest">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white font-black px-4 py-1 border-2 border-black text-xs uppercase tracking-widest no-print">
                                     Imediato
                                 </div>
                                 <h3 className="text-center font-black text-2xl uppercase text-gray-800 mb-4 mt-2">Financiamento</h3>
@@ -595,7 +622,7 @@
                                     </div>
 
                                     <div className="border-t-2 border-dashed border-gray-200 pt-4 space-y-2">
-                                        <div className="bg-red-50 p-2 text-center rounded">
+                                        <div className="bg-red-50 p-2 text-center rounded print:bg-white print:border print:border-red-200">
                                             <p className="text-xs font-bold text-red-900">Juros Totais Pagos:</p>
                                             <p className="text-lg font-black text-red-600">{formatarMoeda(resultado.financiamento.totalJuros)}</p>
                                             <p className="text-[10px] text-red-700 font-bold mt-1 flex items-center justify-center gap-1">
@@ -605,7 +632,7 @@
                                     </div>
                                 </div>
 
-                                <div className="mt-4 pt-4 border-t-4 border-black text-center bg-red-50 -mx-5 -mb-5 p-5">
+                                <div className="mt-4 pt-4 border-t-4 border-black text-center bg-red-50 -mx-5 -mb-5 p-5 print:bg-gray-100">
                                     <p className="text-xs font-black text-red-900 uppercase">Custo Total Aquisição</p>
                                     <p className="text-3xl font-black text-red-600">{formatarMoeda(resultado.financiamento.custoTotalAquisicao)}</p>
                                     <p className="text-[10px] text-red-800 font-bold mt-1">
@@ -616,7 +643,7 @@
 
                             {/* CONSÓRCIO */}
                             <div className="bg-emerald-50 border-4 border-black neo-shadow p-5 flex flex-col relative">
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-white font-black px-4 py-1 border-2 border-black text-xs uppercase tracking-widest">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-white font-black px-4 py-1 border-2 border-black text-xs uppercase tracking-widest no-print">
                                     Planejado
                                 </div>
                                 <h3 className="text-center font-black text-2xl uppercase text-emerald-800 mb-4 mt-2">Consórcio</h3>
@@ -632,34 +659,33 @@
                                         <div className="space-y-1">
                                             <p className="text-4xl font-black text-emerald-600 tracking-tighter">{formatarMoeda(resultado.consorcio.parcelaPosLance)}</p>
                                             
-                                            {/* DESTAQUE DA REDUÇÃO % */}
                                             {resultado.consorcio.totalLance > 0 && tipoAbatimento === 'parcela' && resultado.consorcio.pctReducao > 0 && (
-                                                <p className="text-xs font-bold text-green-700 bg-green-200 inline-flex px-2 rounded mt-1 items-center gap-1">
+                                                <p className="text-xs font-bold text-green-700 bg-green-200 inline-flex px-2 rounded mt-1 items-center gap-1 print:border print:border-green-700">
                                                     <TrendingDown size={14}/> Redução de {resultado.consorcio.pctReducao.toFixed(1)}%
                                                 </p>
                                             )}
 
                                             <p className="text-sm font-bold text-gray-500 mt-1">
                                                 {tipoAbatimento === 'parcela' ? (
-                                                    <span>Restantes <span className="text-black bg-yellow-300 px-1">{prazoConsorcio}x</span> meses</span>
+                                                    <span>Restantes <span className="text-black bg-yellow-300 px-1 print:bg-transparent print:border print:border-black">{prazoConsorcio}x</span> meses</span>
                                                 ) : (
-                                                    <span>Restantes <span className="text-black bg-yellow-300 px-1">{resultado.consorcio.prazoPosLance}x</span> meses</span>
+                                                    <span>Restantes <span className="text-black bg-yellow-300 px-1 print:bg-transparent print:border print:border-black">{resultado.consorcio.prazoPosLance}x</span> meses</span>
                                                 )}
                                             </p>
                                         </div>
                                     </div>
 
-                                    {/* AVISO DE CAUTELA (NOVO) */}
-                                    <div className="bg-yellow-100 p-2 border-2 border-yellow-400 rounded text-xs font-bold text-yellow-900 flex items-start gap-2">
+                                    {/* AVISO DE CAUTELA (SUAVIZADO E CONCISO) */}
+                                    <div className="bg-yellow-100 p-2 border-2 border-yellow-400 rounded text-xs font-bold text-yellow-900 flex items-start gap-2 print:bg-white print:border-black print:text-black">
                                         <Info size={16} className="shrink-0 mt-0.5"/>
                                         <p>
-                                            Consulte a administradora, tire todas as dúvidas e evite surpresas com cláusulas de reajuste ou seguro obrigatório.
+                                            Simulação não garante contemplação. Consulte a administradora e tire dúvidas sobre reajustes.
                                         </p>
                                     </div>
 
                                     {/* RAIO-X LANCE */}
                                     {resultado.consorcio.totalLance > 0 && (
-                                        <div className="bg-white p-2 border-2 border-emerald-200 rounded text-xs space-y-1">
+                                        <div className="bg-white p-2 border-2 border-emerald-200 rounded text-xs space-y-1 print:border-black">
                                             <p className="font-black text-emerald-800 uppercase text-center border-b pb-1">Lance Aplicado: {formatarPorcentagem(resultado.consorcio.percentualTotalLance)}</p>
                                             <div className="flex justify-between">
                                                 <span>Livre (Entrada):</span>
@@ -673,7 +699,7 @@
                                     )}
                                 </div>
 
-                                <div className="mt-4 pt-4 border-t-4 border-black text-center bg-emerald-100 -mx-5 -mb-5 p-5">
+                                <div className="mt-4 pt-4 border-t-4 border-black text-center bg-emerald-100 -mx-5 -mb-5 p-5 print:bg-gray-100">
                                     <p className="text-xs font-black text-emerald-900 uppercase">Custo Total Aquisição</p>
                                     <p className="text-3xl font-black text-emerald-700">{formatarMoeda(resultado.consorcio.custoTotalAquisicao)}</p>
                                     <p className="text-[10px] text-emerald-800 font-bold mt-1">
@@ -683,46 +709,46 @@
                             </div>
                         </div>
 
-                        {/* Botão de Download PDF/Relatório - POSIÇÃO MOVIDA */}
+                        {/* Botão de Download PDF/Relatório */}
                         <div className="no-print mt-6">
                             <button
                                 onClick={handleDownloadPDF}
-                                className="w-full bg-yellow-400 text-black font-black p-3 border-4 border-black neo-shadow-sm flex items-center justify-center gap-2 uppercase hover:bg-yellow-500 transition-colors"
+                                className="w-full bg-yellow-400 text-black font-black p-3 border-4 border-black neo-shadow-sm flex items-center justify-center gap-2 uppercase hover:bg-yellow-500 transition-colors text-sm md:text-base"
                             >
                                 <Download size={20}/> Baixar Relatório (PDF)
                             </button>
                         </div>
 
                         {/* BARRA DE ECONOMIA */}
-                        <NeoCard color="bg-black" className="text-white">
+                        <NeoCard color="bg-black" className="text-white print:border print:border-black print:bg-white print:text-black">
                             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">
-                                    <div className="bg-yellow-400 text-black p-3 border-2 border-white">
+                                    <div className="bg-yellow-400 text-black p-3 border-2 border-white print:border-black">
                                         <Wallet size={32} />
                                     </div>
                                     <div>
-                                        <h4 className="text-yellow-400 font-black text-xl uppercase">
+                                        <h4 className="text-yellow-400 font-black text-xl uppercase print:text-black">
                                             {economia >= 0 ? "Economia Real" : "Melhor Opção"}
                                         </h4>
-                                        <p className="text-gray-400 text-sm">
+                                        <p className="text-gray-400 text-sm print:text-gray-600">
                                             {economia >= 0 ? "Dinheiro que sobra no seu bolso" : `Mais barato que o Consórcio (Economia de ${formatarMoeda(valorDiferenca)})`}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <span className={`text-4xl md:text-5xl font-black ${economia >= 0 ? 'text-green-400' : 'text-blue-400'}`}>
+                                    <span className={`text-4xl md:text-5xl font-black ${economia >= 0 ? 'text-green-400 print:text-green-700' : 'text-blue-400 print:text-blue-700'}`}>
                                         {formatarMoeda(valorDiferenca)}
                                     </span>
                                 </div>
                             </div>
                         </NeoCard>
 
-                        {/* RODAPÉ E DISCLAIMER (Aviso Final) */}
-                        <footer className="mt-12 text-center text-xs text-gray-600 border-t pt-4">
+                        {/* RODAPÉ E DISCLAIMER */}
+                        <footer className="mt-12 text-center text-xs text-gray-600 border-t pt-4 no-print">
                             <h4 className="font-black text-sm uppercase mb-1">Aviso Final</h4>
                             <p>
                                 O <span className="font-extrabold text-gray-800">Custo Real Auto</span> é uma ferramenta de simulação e comparação. 
-                                Ele não representa uma proposta oficial de crédito de nenhuma instituição financeira ou administradora de consórcios.
+                                Ele não representa uma proposta oficial de crédito.
                             </p>
                             <p className="mt-2 text-red-600 font-bold">
                                 Seu CET real sempre será definido pelo seu perfil de crédito e contrato.
