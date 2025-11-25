@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simula Transparente - Portátil</title>
+    <title>Custo Real Auto | Simulação 100% Privada</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Configuração Tailwind para aceitar as cores do código -->
     <script>
         tailwind.config = {
             theme: {
@@ -25,7 +24,7 @@
         }
     </script>
 
-    <!-- React e ReactDOM via CDN (ES Modules) -->
+    <!-- React e ReactDOM -->
     <script type="importmap">
         {
             "imports": {
@@ -36,26 +35,49 @@
         }
     </script>
 
-    <!-- Babel para rodar JSX no navegador (apenas para dev/teste local) -->
+    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
         body { background-color: #F3F4F6; font-family: sans-serif; }
-        /* Ajustes finos para o estilo neobrutalista */
         .neo-shadow { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
         .neo-shadow-sm { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+        /* Adiciona a animação de alerta */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake-alert {
+            animation: shake 0.3s;
+        }
+        /* Oculta o botão de download na versão impressa */
+        @media print {
+            .no-print {
+                display: none;
+            }
+            main {
+                /* Garante que o conteúdo não seja cortado */
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            .neo-shadow {
+                /* Remove as sombras no PDF para economizar tinta */
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-    <!-- Código da Aplicação -->
     <script type="text/babel" data-type="module">
         import React, { useState, useEffect } from 'react';
         import ReactDOM from 'react-dom/client';
-        import { Calculator, AlertTriangle, Info, ChevronDown, ChevronUp, PieChart, TrendingUp, Building2, Skull, X, Swords, Crown, Hourglass, Banknote, Gauge, HelpCircle, ArrowRight, Wallet, ArrowDownCircle, Sliders } from 'lucide-react';
+        import { UserX, AlertTriangle, Info, ChevronDown, ChevronUp, Swords, Crown, Wallet, TrendingDown, Building2, Download } from 'lucide-react';
 
-        // --- COMPONENTES NEOBRUTALISTAS ---
+        // --- COMPONENTES ---
 
         const NeoCard = ({ children, className = "", color = "bg-white" }) => (
             <div className={`border-4 border-black neo-shadow ${color} p-6 ${className} transition-transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]`}>
@@ -63,13 +85,13 @@
             </div>
         );
 
-        const NeoInput = ({ label, value, onChange, prefix, suffix, type="number", helper, error }) => (
+        const NeoInput = ({ label, value, onChange, prefix, suffix, type="number", helper, error, alert }) => (
             <div className="mb-4">
                 <label className="block font-black text-black mb-1 uppercase tracking-tighter text-sm flex justify-between items-center">
                 {label}
                 {helper && <span className="text-[10px] font-normal text-black bg-gray-200 px-1 border border-black">{helper}</span>}
                 </label>
-                <div className={`flex border-4 ${error ? 'border-red-500 bg-red-50' : 'border-black bg-white'} focus-within:bg-yellow-50 focus-within:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all`}>
+                <div className={`flex border-4 ${error ? 'border-red-500 bg-red-50 shake-alert' : 'border-black bg-white'} focus-within:bg-yellow-50 focus-within:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all`}>
                 {prefix && <span className="bg-black text-white font-bold p-3 flex items-center justify-center min-w-[3rem]">{prefix}</span>}
                 <input
                     type={type}
@@ -80,7 +102,7 @@
                 />
                 {suffix && <span className="bg-gray-200 text-black font-bold p-3 flex items-center justify-center border-l-4 border-black">{suffix}</span>}
                 </div>
-                {error && <p className="text-xs text-red-600 font-bold mt-1">{error}</p>}
+                {error && <p className="text-xs text-red-600 font-bold mt-1 flex items-center gap-1"><AlertTriangle size={12}/>{error}</p>}
             </div>
         );
 
@@ -103,24 +125,45 @@
         );
 
         const App = () => {
-            // --- DADOS ---
+            // --- DADOS BANCÁRIOS AJUSTADOS (Maior realismo para usados) ---
             const TAXAS_BANCOS = {
-                'media': { nome: 'MÉDIA DE MERCADO', taxa: 2.15 },
-                'bb': { nome: 'BANCO DO BRASIL', taxa: 1.95 },
-                'caixa': { nome: 'CAIXA ECONÔMICA', taxa: 1.94 },
-                'itau': { nome: 'ITAÚ', taxa: 2.10 },
-                'bradesco': { nome: 'BRADESCO', taxa: 1.95 },
-                'santander': { nome: 'SANTANDER', taxa: 2.14 },
-                'safra': { nome: 'SAFRA', taxa: 1.76 },
-                'nubank': { nome: 'NUBANK', taxa: 2.00 },
+                'media': { nome: 'MÉDIA GERAL', novo: 1.65, usado: 2.35 }, 
+                'bb': { nome: 'BANCO DO BRASIL', novo: 1.55, usado: 2.05 }, 
+                'caixa': { nome: 'CAIXA ECONÔMICA', novo: 1.49, usado: 1.95 }, 
+                'itau': { nome: 'ITAÚ VEÍCULOS', novo: 1.69, usado: 2.25 },
+                'bradesco': { nome: 'BRADESCO FINANC.', novo: 1.58, usado: 2.15 }, 
+                'santander': { nome: 'SANTANDER', novo: 1.65, usado: 2.20 }, 
+                'safra': { nome: 'BANCO SAFRA', novo: 1.60, usado: 2.10 }, 
+                'nubank': { nome: 'NUBANK (Crédito Auto)', novo: 1.85, usado: 2.20 },
+                'vw': { nome: 'VOLKSWAGEN BANK', novo: 0.99, usado: 2.10 }, 
+                'bv': { nome: 'BV FINANCEIRA', novo: 1.89, usado: 2.35 },
+                'pan': { nome: 'BANCO PAN', novo: 1.95, usado: 2.45 },
             };
 
+            // --- DADOS CONSÓRCIO (Taxa Adm Total + Fundo de Reserva - dados de mercado conservadores) ---
+            const TAXAS_CONSORCIO = {
+                'mycon': { nome: 'MYCON', adm: 9.99, fundo: 1.5, prazo: 180 }, 
+                'caixa_con': { nome: 'CAIXA CONSÓRCIOS', adm: 15.0, fundo: 1.0, prazo: 80 },
+                'bradesco_con': { nome: 'BRADESCO CONSÓRCIOS', adm: 14.5, fundo: 2.0, prazo: 100 },
+                'bancobrasil_con': { nome: 'BB CONSÓRCIOS', adm: 13.5, fundo: 2.5, prazo: 96 },
+                'itau_con': { nome: 'ITAÚ CONSÓRCIOS', adm: 14.0, fundo: 2.0, prazo: 90 }, 
+                'rodobens': { nome: 'RODOBENS', adm: 13.0, fundo: 1.5, prazo: 120 },
+                'porto': { nome: 'PORTO SEGURO', adm: 12.5, fundo: 2.0, prazo: 72 }, 
+                'hs': { nome: 'HS CONSÓRCIOS', adm: 18.0, fundo: 1.0, prazo: 70 }, 
+                'custom': { nome: 'PERSONALIZADO', adm: 11.5, fundo: 1.5, prazo: 80 }
+            };
+
+
             // --- ESTADOS ---
+            const [tipoVeiculo, setTipoVeiculo] = useState('usado'); 
             const [bancoSelecionado, setBancoSelecionado] = useState('media');
+            const [consorcioSelecionado, setConsorcioSelecionado] = useState('mycon');
+            
             const [valorVeiculo, setValorVeiculo] = useState(50000);
-            const [entrada, setEntrada] = useState(35000); // 70% default
-            const [parcelas, setParcelas] = useState(48); // Esticando o prazo
-            const [taxaJuros, setTaxaJuros] = useState(2.15);
+            const [entrada, setEntrada] = useState(15000); 
+            const [parcelas, setParcelas] = useState(48); 
+            const [taxaJuros, setTaxaJuros] = useState(2.35); 
+            const [jurosError, setJurosError] = useState(''); 
 
             // Custos Ocultos Financiamento
             const [tac, setTac] = useState(950);
@@ -129,38 +172,20 @@
             const [seguroPrestamista, setSeguroPrestamista] = useState(0);
 
             // Consórcio Configs
-            const [taxaAdminTotal, setTaxaAdminTotal] = useState(14.00); 
-            const [prazoConsorcio, setPrazoConsorcio] = useState(80);
+            const [taxaAdmin, setTaxaAdmin] = useState(9.99); 
+            const [fundoReserva, setFundoReserva] = useState(1.5);
+            const [prazoConsorcio, setPrazoConsorcio] = useState(180);
             
             // Lances Consórcio
             const [usarEntradaComoLance, setUsarEntradaComoLance] = useState(true);
             const [percentualEmbutido, setPercentualEmbutido] = useState(0);
-            
-            // ESTRATÉGIA DE LANCE
-            const [tipoAbatimento, setTipoAbatimento] = useState('parcela'); // 'prazo' ou 'parcela'
+            const [tipoAbatimento, setTipoAbatimento] = useState('parcela'); 
             
             const [mostrarCustosDetalhados, setMostrarCustosDetalhados] = useState(false);
             
             const [resultado, setResultado] = useState({
-                financiamento: { 
-                    parcela: 0, 
-                    totalParcelas: 0, 
-                    custoTotalAquisicao: 0, 
-                    totalJuros: 0 
-                },
-                consorcio: { 
-                    cartaNecessaria: 0,
-                    parcelaCheia: 0, 
-                    parcelaPosLance: 0,
-                    prazoPosLance: 0,
-                    custoTotalAquisicao: 0, 
-                    economia: 0,
-                    lanceEmbutidoValor: 0,
-                    lanceLivreValor: 0,
-                    totalLance: 0,
-                    percentualTotalLance: 0,
-                    taxaAdmMoney: 0
-                }
+                financiamento: { parcela: 0, totalParcelas: 0, custoTotalAquisicao: 0, totalJuros: 0, cetAnual: 0 },
+                consorcio: { cartaNecessaria: 0, parcelaCheia: 0, parcelaPosLance: 0, prazoPosLance: 0, custoTotalAquisicao: 0, economia: 0, lanceEmbutidoValor: 0, lanceLivreValor: 0, totalLance: 0, percentualTotalLance: 0, taxaAdmMoney: 0, fundoMoney: 0, pctReducao: 0 }
             });
 
             // --- HANDLERS ---
@@ -169,13 +194,53 @@
                 setter(value === '' ? '' : parseFloat(value));
             };
 
+            const handleJurosChange = (e) => {
+                const input = e.target.value;
+                const taxa = parseFloat(input);
+                setTaxaJuros(taxa);
+
+                if (input !== '' && (taxa > 3.5 || taxa < 0.8)) {
+                    setJurosError('Taxa fora do padrão de mercado (0.8% a 3.5% a.m.). Revise sua negociação.');
+                } else {
+                    setJurosError('');
+                }
+            };
+
             const handleTrocaBanco = (e) => {
                 const bancoKey = e.target.value;
                 setBancoSelecionado(bancoKey);
-                setTaxaJuros(TAXAS_BANCOS[bancoKey].taxa);
+                const novaTaxa = TAXAS_BANCOS[bancoKey][tipoVeiculo];
+                setTaxaJuros(novaTaxa);
+                setJurosError('');
             };
 
-            // --- CÁLCULO ---
+            const handleTrocaConsorcio = (e) => {
+                const consorcioKey = e.target.value;
+                setConsorcioSelecionado(consorcioKey);
+                const data = TAXAS_CONSORCIO[consorcioKey];
+                setTaxaAdmin(data.adm);
+                setFundoReserva(data.fundo);
+                setPrazoConsorcio(data.prazo);
+            };
+
+            // Atualiza taxa ao mudar Tipo de Veículo
+            useEffect(() => {
+                const novaTaxa = TAXAS_BANCOS[bancoSelecionado][tipoVeiculo];
+                setTaxaJuros(novaTaxa);
+            }, [tipoVeiculo, bancoSelecionado]);
+
+            // Atualiza taxa Adm ao mudar a administradora (necessário para o campo personalizado)
+            useEffect(() => {
+                if (consorcioSelecionado !== 'custom') {
+                    const data = TAXAS_CONSORCIO[consorcioSelecionado];
+                    setTaxaAdmin(data.adm);
+                    setFundoReserva(data.fundo);
+                    setPrazoConsorcio(data.prazo);
+                }
+            }, [consorcioSelecionado]);
+
+
+            // --- CÁLCULO GERAL ---
             useEffect(() => {
                 const v = (val) => val === '' ? 0 : parseFloat(val);
 
@@ -189,11 +254,13 @@
                 
                 let parcFinan = 0;
                 if (principalFinanciado > 0) {
-                parcFinan = i === 0 ? principalFinanciado/n : principalFinanciado * ((i * Math.pow(1+i, n)) / (Math.pow(1+i, n) - 1));
+                    parcFinan = i === 0 ? principalFinanciado/n : principalFinanciado * ((i * Math.pow(1+i, n)) / (Math.pow(1+i, n) - 1));
                 }
                 
                 const totalParcelasFinan = parcFinan * n;
                 const custoTotalFinan = v(entrada) + totalParcelasFinan;
+                const cetAnual = (Math.pow((1 + i), 12) - 1) * 100;
+
 
                 // 2. CÁLCULO CONSÓRCIO
                 let objetivoLiquidoDaCarta = v(valorVeiculo); 
@@ -212,24 +279,29 @@
                 const totalLance = lanceEmbutidoValor + lanceLivreValor;
                 const percentualTotalLance = (totalLance / cartaNecessaria) * 100;
 
-                const taxaAdmDecimal = v(taxaAdminTotal) / 100;
-                const taxaAdmMoney = cartaNecessaria * taxaAdmDecimal; 
-                const totalContratoConsorcio = cartaNecessaria * (1 + taxaAdmDecimal);
+                // Custo Consórcio
+                const taxaAdmTotalDecimal = (v(taxaAdmin) + v(fundoReserva)) / 100;
+                const taxaAdmMoney = cartaNecessaria * (v(taxaAdmin) / 100); 
+                const fundoMoney = cartaNecessaria * (v(fundoReserva) / 100);
+                
+                const totalContratoConsorcio = cartaNecessaria * (1 + taxaAdmTotalDecimal);
                 const parcConsorcioCheia = totalContratoConsorcio / v(prazoConsorcio);
 
-                // === CÁLCULOS PÓS-LANCE (ESTRATÉGIA) ===
+                // === CÁLCULOS PÓS-LANCE ===
                 const saldoDevedorAposLance = totalContratoConsorcio - totalLance;
 
                 let parcelaPosLance = parcConsorcioCheia;
                 let prazoPosLance = v(prazoConsorcio);
+                let pctReducao = 0;
 
                 if (tipoAbatimento === 'parcela') {
-                    // Diluir Lance na Parcela
                     if (v(prazoConsorcio) > 0) {
                         parcelaPosLance = saldoDevedorAposLance / v(prazoConsorcio);
+                        if (parcConsorcioCheia > 0) {
+                            pctReducao = ((parcConsorcioCheia - parcelaPosLance) / parcConsorcioCheia) * 100;
+                        }
                     }
                 } else {
-                    // Reduzir Prazo
                     if (parcConsorcioCheia > 0) {
                         const mesesRestantes = Math.ceil(saldoDevedorAposLance / parcConsorcioCheia);
                         prazoPosLance = mesesRestantes;
@@ -240,7 +312,7 @@
                     }
                 }
 
-                const custoTotalConsorcio = v(valorVeiculo) + taxaAdmMoney;
+                const custoTotalConsorcio = v(valorVeiculo) + taxaAdmMoney + fundoMoney; // Custo = Valor do Bem + Taxas Adm + Fundo (O que realmente sai do bolso)
 
                 setResultado({
                     financiamento: {
@@ -248,6 +320,7 @@
                         totalParcelas: totalParcelasFinan,
                         custoTotalAquisicao: custoTotalFinan,
                         totalJuros: custoTotalFinan - v(valorVeiculo),
+                        cetAnual: cetAnual,
                     },
                     consorcio: {
                         cartaNecessaria: cartaNecessaria,
@@ -260,11 +333,13 @@
                         lanceLivreValor: lanceLivreValor,
                         totalLance: totalLance,
                         percentualTotalLance: percentualTotalLance,
-                        taxaAdmMoney: taxaAdmMoney
+                        taxaAdmMoney: taxaAdmMoney,
+                        fundoMoney: fundoMoney,
+                        pctReducao: pctReducao
                     }
                 });
 
-            }, [valorVeiculo, entrada, parcelas, taxaJuros, tac, gravame, avaliacao, seguroPrestamista, taxaAdminTotal, prazoConsorcio, percentualEmbutido, usarEntradaComoLance, tipoAbatimento]);
+            }, [valorVeiculo, entrada, parcelas, taxaJuros, tac, gravame, avaliacao, seguroPrestamista, taxaAdmin, fundoReserva, prazoConsorcio, percentualEmbutido, usarEntradaComoLance, tipoAbatimento, consorcioSelecionado]);
 
             const formatarMoeda = (valor) => {
                 return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
@@ -273,6 +348,31 @@
             const formatarPorcentagem = (valor) => {
                 return (valor || 0).toFixed(1) + '%';
             };
+
+            const formatarCET = (valor) => {
+                return (valor || 0).toFixed(2) + '% a.a.';
+            };
+
+            const handleDownloadPDF = () => {
+                // Remove elementos de controle para impressão limpa
+                const controls = document.querySelectorAll('.no-print');
+                controls.forEach(el => el.style.display = 'none');
+
+                // Adiciona um título de relatório para a impressão
+                document.title = 'Relatório de Simulação - Custo Real Auto';
+
+                // Imprime a página (O navegador irá gerar o PDF)
+                window.print();
+
+                // Restaura a visualização
+                controls.forEach(el => el.style.display = 'block');
+                document.title = 'Custo Real Auto | Simulação 100% Privada';
+            };
+
+            // Lógica para o card de Economia/Melhor Opção
+            const economia = resultado.consorcio.economia;
+            const valorDiferenca = Math.abs(economia);
+
 
             return (
                 <div className="min-h-screen pb-20 overflow-x-hidden selection:bg-yellow-400 selection:text-black">
@@ -285,13 +385,25 @@
                         </div>
                         <div>
                             <h1 className="text-2xl md:text-4xl font-black uppercase tracking-tighter leading-none">
-                            SIMULA <span className="bg-yellow-400 px-1">TRANSPARENTE</span>
+                            CUSTO <span className="bg-yellow-400 px-1">REAL</span> AUTO
                             </h1>
-                            <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Portátil Edition</p>
+                            <p className="text-sm font-extrabold uppercase tracking-widest text-black mt-1">
+                                <span className="text-emerald-700">100% PRIVADO.</span> RÁPIDO. SEM PEDIR SEUS DADOS.
+                            </p>
                         </div>
                     </div>
                     </div>
                 </header>
+                
+                <div className="max-w-7xl mx-auto p-4 md:p-6">
+                    <div className="bg-white border-4 border-black p-4 neo-shadow-sm text-center no-print">
+                        <p className="text-xs font-bold text-gray-800">
+                            Esta ferramenta não retém e nem coleta dados pessoais. 
+                            Use para comparar o custo real da aquisição de seu veículo sem ser incomodado por propostas de vendas.
+                        </p>
+                    </div>
+                </div>
+
 
                 <main className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 mt-4">
                     
@@ -301,53 +413,124 @@
                     <NeoCard color="bg-white" className="relative">
                         <div className="flex items-center gap-2 mb-4 border-b-4 border-black pb-2">
                             <Building2 size={24} className="text-blue-600" />
-                            <h2 className="text-xl font-black uppercase text-blue-900">1. Dados & Financiamento</h2>
+                            <h2 className="text-xl font-black uppercase text-blue-900">1. Dados do Financiamento</h2>
                         </div>
+
+                        {/* SELETOR NOVO/USADO */}
+                        <div className="flex gap-2 mb-4 p-1 bg-gray-100 border-2 border-black">
+                            <button 
+                                onClick={() => setTipoVeiculo('novo')}
+                                className={`flex-1 py-2 font-black uppercase text-xs transition-all ${tipoVeiculo === 'novo' ? 'bg-blue-600 text-white border-2 border-black shadow-sm' : 'text-gray-500 hover:bg-gray-200'}`}
+                            >
+                                Carro 0km
+                            </button>
+                            <button 
+                                onClick={() => setTipoVeiculo('usado')}
+                                className={`flex-1 py-2 font-black uppercase text-xs transition-all ${tipoVeiculo === 'usado' ? 'bg-orange-500 text-white border-2 border-black shadow-sm' : 'text-gray-500 hover:bg-gray-200'}`}
+                            >
+                                Usado/Seminovo
+                            </button>
+                        </div>
+
+                        <NeoSelect 
+                            label="Instituição Financeira (Taxas Estimadas)"
+                            value={bancoSelecionado}
+                            onChange={handleTrocaBanco}
+                            options={Object.entries(TAXAS_BANCOS).map(([key, data]) => (
+                                <option key={key} value={key}>{data.nome} (~{data[tipoVeiculo]}% a.m.)</option>
+                            ))}
+                        />
                         
-                        <div className="grid grid-cols-2 gap-4">
-                        <NeoInput label="Valor do Carro" prefix="R$" value={valorVeiculo} onChange={handleInput(setValorVeiculo)} />
-                        <NeoInput label="Sua Entrada" prefix="R$" value={entrada} onChange={handleInput(setEntrada)} />
+                        <div className="grid grid-cols-2 gap-4 mt-4">
+                            <NeoInput label="Valor do Carro" prefix="R$" value={valorVeiculo} onChange={handleInput(setValorVeiculo)} />
+                            <NeoInput label="Sua Entrada" prefix="R$" value={entrada} onChange={handleInput(setEntrada)} />
                         </div>
 
                         <div className="bg-blue-50 p-4 border-2 border-blue-100 mt-2">
-                            <p className="text-xs font-black uppercase text-blue-800 mb-2">Opção: Financiar o Resto</p>
+                            <p className="text-xs font-black uppercase text-blue-800 mb-2">Condições</p>
                             <div className="grid grid-cols-2 gap-4">
                                 <NeoSelect
-                                    label="Prazo Esticado"
+                                    label="Prazo"
                                     value={parcelas}
                                     onChange={(e) => setParcelas(Number(e.target.value))}
                                     options={[12, 24, 36, 48, 60].map(m => <option key={m} value={m}>{m}x</option>)}
                                 />
-                                <NeoInput label="Juros (a.m.)" prefix="%" value={taxaJuros} onChange={handleInput(setTaxaJuros)} />
+                                <NeoInput 
+                                    label="Juros (a.m.)" 
+                                    prefix="%" 
+                                    value={taxaJuros} 
+                                    onChange={handleJurosChange} 
+                                    error={jurosError} 
+                                />
                             </div>
+                            {/* NOVO AVISO DE TRANSPARÊNCIA */}
+                            <div className="mt-4 p-2 bg-blue-100 border-2 border-blue-200 text-xs font-bold flex items-center gap-2">
+                                <Info size={14} className="text-blue-700 shrink-0"/>
+                                <span className="text-blue-900">
+                                    A taxa é uma média. O seu juro final dependerá do seu SCORE de crédito e do seu relacionamento com o banco.
+                                </span>
+                            </div>
+
+                            <button 
+                                onClick={() => setMostrarCustosDetalhados(!mostrarCustosDetalhados)}
+                                className="text-[10px] font-bold underline text-blue-600 mt-1"
+                            >
+                                {mostrarCustosDetalhados ? 'Ocultar' : 'Editar'} Taxas Extras (TAC/Gravame)
+                            </button>
+                            {mostrarCustosDetalhados && (
+                                <div className="mt-2 grid grid-cols-2 gap-2 animate-in fade-in">
+                                    <NeoInput label="TAC" prefix="R$" value={tac} onChange={handleInput(setTac)} />
+                                    <NeoInput label="Gravame" prefix="R$" value={gravame} onChange={handleInput(setGravame)} />
+                                    <NeoInput label="Avaliação" prefix="R$" value={avaliacao} onChange={handleInput(setAvaliacao)} />
+                                    <NeoInput label="Seguro" prefix="R$" value={seguroPrestamista} onChange={handleInput(setSeguroPrestamista)} />
+                                </div>
+                            )}
                         </div>
                     </NeoCard>
 
                     <NeoCard color="bg-emerald-50">
                         <div className="flex items-center gap-2 mb-4 border-b-4 border-black pb-2">
                             <Crown size={24} className="text-emerald-700"/>
-                            <h2 className="text-xl font-black uppercase text-emerald-900">2. Consórcio</h2>
+                            <h2 className="text-xl font-black uppercase text-emerald-900">2. Comparar com Consórcio</h2>
                         </div>
                         
-                        <div className="grid grid-cols-2 gap-4">
-                        <NeoInput 
-                            label="Taxa Adm Total" 
-                            prefix="%" 
-                            value={taxaAdminTotal} 
-                            onChange={handleInput(setTaxaAdminTotal)} 
+                        <NeoSelect 
+                            label="Administradora"
+                            value={consorcioSelecionado}
+                            onChange={handleTrocaConsorcio}
+                            options={Object.entries(TAXAS_CONSORCIO).map(([key, data]) => {
+                                const taxaTotal = (data.adm + data.fundo).toFixed(2);
+                                return <option key={key} value={key}>{data.nome} (~{taxaTotal}% total)</option>
+                            })}
                         />
-                        <NeoInput 
-                            label="Prazo Grupo" 
-                            prefix="Meses" 
-                            value={prazoConsorcio} 
-                            onChange={handleInput(setPrazoConsorcio)} 
-                        />
+
+                        <div className="grid grid-cols-3 gap-4">
+                            <NeoInput 
+                                label="Taxa Adm" 
+                                prefix="%" 
+                                value={taxaAdmin} 
+                                onChange={handleInput(setTaxaAdmin)} 
+                                helper="Remuneração da Adm"
+                            />
+                            <NeoInput 
+                                label="Fundo Reserva" 
+                                prefix="%" 
+                                value={fundoReserva} 
+                                onChange={handleInput(setFundoReserva)} 
+                                helper="Pode ser devolvido"
+                            />
+                            <NeoInput 
+                                label="Prazo Grupo" 
+                                prefix="Meses" 
+                                value={prazoConsorcio} 
+                                onChange={handleInput(setPrazoConsorcio)} 
+                            />
                         </div>
 
                         {/* LANCES */}
                         <div className="bg-yellow-200 border-4 border-black p-4 mt-4 relative">
-                            <div className="absolute -top-3 -right-3 bg-red-600 text-white text-xs font-black px-2 py-1 rotate-3 border-2 border-black shadow-sm">
-                                LANCES
+                            <div className="absolute -top-3 -right-3 bg-red-600 text-white font-black px-2 py-1 rotate-3 border-2 border-black shadow-sm">
+                                ESTRATÉGIA DE LANCE
                             </div>
                             
                             <div className="flex items-center gap-2 mb-4 bg-white p-2 border-2 border-black">
@@ -371,17 +554,17 @@
                         />
                         
                         <div className="mt-4 pt-4 border-t-2 border-black border-dashed">
-                            <p className="font-black text-xs uppercase mb-2">Estratégia Pós-Contemplação:</p>
+                            <p className="font-black text-xs uppercase mb-2">Se for contemplado, você prefere:</p>
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => setTipoAbatimento('parcela')}
-                                    className={`flex-1 p-2 text-xs font-black uppercase border-2 border-black ${tipoAbatimento === 'parcela' ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'}`}
+                                    className={`flex-1 p-2 text-xs font-black uppercase border-2 border-black transition-colors ${tipoAbatimento === 'parcela' ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'}`}
                                 >
                                     Reduzir Parcela
                                 </button>
                                 <button
                                     onClick={() => setTipoAbatimento('prazo')}
-                                    className={`flex-1 p-2 text-xs font-black uppercase border-2 border-black ${tipoAbatimento === 'prazo' ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'}`}
+                                    className={`flex-1 p-2 text-xs font-black uppercase border-2 border-black transition-colors ${tipoAbatimento === 'prazo' ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'}`}
                                 >
                                     Reduzir Prazo
                                 </button>
@@ -415,13 +598,19 @@
                                         <div className="bg-red-50 p-2 text-center rounded">
                                             <p className="text-xs font-bold text-red-900">Juros Totais Pagos:</p>
                                             <p className="text-lg font-black text-red-600">{formatarMoeda(resultado.financiamento.totalJuros)}</p>
+                                            <p className="text-[10px] text-red-700 font-bold mt-1 flex items-center justify-center gap-1">
+                                                <Info size={12}/> CET Anual: {formatarCET(resultado.financiamento.cetAnual)}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="mt-4 pt-4 border-t-4 border-black text-center bg-red-50 -mx-5 -mb-5 p-5">
-                                    <p className="text-xs font-black text-red-900 uppercase">Custo Total (Carro + Juros)</p>
+                                    <p className="text-xs font-black text-red-900 uppercase">Custo Total Aquisição</p>
                                     <p className="text-3xl font-black text-red-600">{formatarMoeda(resultado.financiamento.custoTotalAquisicao)}</p>
+                                    <p className="text-[10px] text-red-800 font-bold mt-1">
+                                        (Entrada + Parcelas + Taxas)
+                                    </p>
                                 </div>
                             </div>
 
@@ -441,9 +630,15 @@
                                         </p>
                                         
                                         <div className="space-y-1">
-                                            <p className="text-4xl font-black text-emerald-600 tracking-tighter">
-                                                {formatarMoeda(resultado.consorcio.parcelaPosLance)}
-                                            </p>
+                                            <p className="text-4xl font-black text-emerald-600 tracking-tighter">{formatarMoeda(resultado.consorcio.parcelaPosLance)}</p>
+                                            
+                                            {/* DESTAQUE DA REDUÇÃO % */}
+                                            {resultado.consorcio.totalLance > 0 && tipoAbatimento === 'parcela' && resultado.consorcio.pctReducao > 0 && (
+                                                <p className="text-xs font-bold text-green-700 bg-green-200 inline-flex px-2 rounded mt-1 items-center gap-1">
+                                                    <TrendingDown size={14}/> Redução de {resultado.consorcio.pctReducao.toFixed(1)}%
+                                                </p>
+                                            )}
+
                                             <p className="text-sm font-bold text-gray-500 mt-1">
                                                 {tipoAbatimento === 'parcela' ? (
                                                     <span>Restantes <span className="text-black bg-yellow-300 px-1">{prazoConsorcio}x</span> meses</span>
@@ -454,12 +649,20 @@
                                         </div>
                                     </div>
 
+                                    {/* AVISO DE CAUTELA (NOVO) */}
+                                    <div className="bg-yellow-100 p-2 border-2 border-yellow-400 rounded text-xs font-bold text-yellow-900 flex items-start gap-2">
+                                        <Info size={16} className="shrink-0 mt-0.5"/>
+                                        <p>
+                                            Consulte a administradora, tire todas as dúvidas e evite surpresas com cláusulas de reajuste ou seguro obrigatório.
+                                        </p>
+                                    </div>
+
                                     {/* RAIO-X LANCE */}
                                     {resultado.consorcio.totalLance > 0 && (
                                         <div className="bg-white p-2 border-2 border-emerald-200 rounded text-xs space-y-1">
                                             <p className="font-black text-emerald-800 uppercase text-center border-b pb-1">Lance Aplicado: {formatarPorcentagem(resultado.consorcio.percentualTotalLance)}</p>
                                             <div className="flex justify-between">
-                                                <span>Livre:</span>
+                                                <span>Livre (Entrada):</span>
                                                 <span>{formatarMoeda(resultado.consorcio.lanceLivreValor)}</span>
                                             </div>
                                             <div className="flex justify-between">
@@ -471,10 +674,23 @@
                                 </div>
 
                                 <div className="mt-4 pt-4 border-t-4 border-black text-center bg-emerald-100 -mx-5 -mb-5 p-5">
-                                    <p className="text-xs font-black text-emerald-900 uppercase">Custo Total (Carro + Taxas)</p>
+                                    <p className="text-xs font-black text-emerald-900 uppercase">Custo Total Aquisição</p>
                                     <p className="text-3xl font-black text-emerald-700">{formatarMoeda(resultado.consorcio.custoTotalAquisicao)}</p>
+                                    <p className="text-[10px] text-emerald-800 font-bold mt-1">
+                                        (Valor do Bem + Taxas)
+                                    </p>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Botão de Download PDF/Relatório - POSIÇÃO MOVIDA */}
+                        <div className="no-print mt-6">
+                            <button
+                                onClick={handleDownloadPDF}
+                                className="w-full bg-yellow-400 text-black font-black p-3 border-4 border-black neo-shadow-sm flex items-center justify-center gap-2 uppercase hover:bg-yellow-500 transition-colors"
+                            >
+                                <Download size={20}/> Baixar Relatório (PDF)
+                            </button>
                         </div>
 
                         {/* BARRA DE ECONOMIA */}
@@ -485,15 +701,33 @@
                                         <Wallet size={32} />
                                     </div>
                                     <div>
-                                        <h4 className="text-yellow-400 font-black text-xl uppercase">Economia Real</h4>
-                                        <p className="text-gray-400 text-sm">Dinheiro que sobra no seu bolso</p>
+                                        <h4 className="text-yellow-400 font-black text-xl uppercase">
+                                            {economia >= 0 ? "Economia Real" : "Melhor Opção"}
+                                        </h4>
+                                        <p className="text-gray-400 text-sm">
+                                            {economia >= 0 ? "Dinheiro que sobra no seu bolso" : `Mais barato que o Consórcio (Economia de ${formatarMoeda(valorDiferenca)})`}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <span className="text-4xl md:text-5xl font-black text-green-400">{formatarMoeda(resultado.consorcio.economia)}</span>
+                                    <span className={`text-4xl md:text-5xl font-black ${economia >= 0 ? 'text-green-400' : 'text-blue-400'}`}>
+                                        {formatarMoeda(valorDiferenca)}
+                                    </span>
                                 </div>
                             </div>
                         </NeoCard>
+
+                        {/* RODAPÉ E DISCLAIMER (Aviso Final) */}
+                        <footer className="mt-12 text-center text-xs text-gray-600 border-t pt-4">
+                            <h4 className="font-black text-sm uppercase mb-1">Aviso Final</h4>
+                            <p>
+                                O <span className="font-extrabold text-gray-800">Custo Real Auto</span> é uma ferramenta de simulação e comparação. 
+                                Ele não representa uma proposta oficial de crédito de nenhuma instituição financeira ou administradora de consórcios.
+                            </p>
+                            <p className="mt-2 text-red-600 font-bold">
+                                Seu CET real sempre será definido pelo seu perfil de crédito e contrato.
+                            </p>
+                        </footer>
 
                     </div>
                 </main>
