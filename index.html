@@ -456,7 +456,7 @@
             
             return (
                 <div className={`
-                    neo-brutal rounded-2xl p-6 
+                    neo-brutal rounded-2xl p-4 md:p-6 
                     ${variants[variant]} 
                     ${glowClass}
                     ${className}
@@ -468,10 +468,10 @@
 
         const NeoInput = ({ label, value, onChange, prefix, suffix, type="number", helper, error }) => (
             <div className="mb-4">
-                <label className="block font-display font-bold text-zinc-300 mb-2 text-sm uppercase tracking-wide flex justify-between items-center">
-                    {label}
+                <label className="block font-display font-bold text-zinc-300 mb-2 text-xs md:text-sm uppercase tracking-wide flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                    <span className="break-words">{label}</span>
                     {helper && (
-                        <span className="text-[10px] font-normal text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded-full no-print">
+                        <span className="text-[9px] md:text-[10px] font-normal text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded-full no-print whitespace-nowrap">
                             {helper}
                         </span>
                     )}
@@ -484,7 +484,7 @@
                     }
                 `}>
                     {prefix && (
-                        <span className="bg-zinc-950 text-yellow-500 font-mono font-bold px-4 flex items-center justify-center text-sm border-r border-zinc-700">
+                        <span className="bg-zinc-950 text-yellow-500 font-mono font-bold px-2 md:px-4 flex items-center justify-center text-xs md:text-sm border-r border-zinc-700 whitespace-nowrap">
                             {prefix}
                         </span>
                     )}
@@ -492,11 +492,11 @@
                         type={type}
                         value={value}
                         onChange={onChange}
-                        className="w-full p-3 font-mono font-bold text-lg bg-transparent outline-none text-white placeholder-zinc-600"
+                        className="w-full p-2 md:p-3 font-mono font-bold text-base md:text-lg bg-transparent outline-none text-white placeholder-zinc-600 min-w-0"
                         placeholder="0"
                     />
                     {suffix && (
-                        <span className="bg-zinc-950 text-zinc-400 font-bold px-4 flex items-center justify-center text-xs border-l border-zinc-700 no-print">
+                        <span className="bg-zinc-950 text-zinc-400 font-bold px-2 md:px-4 flex items-center justify-center text-[10px] md:text-xs border-l border-zinc-700 no-print whitespace-nowrap">
                             {suffix}
                         </span>
                     )}
@@ -511,19 +511,19 @@
 
         const NeoSelect = ({ label, value, onChange, options }) => (
             <div className="mb-4">
-                <label className="block font-display font-bold text-zinc-300 mb-2 text-sm uppercase tracking-wide">
+                <label className="block font-display font-bold text-zinc-300 mb-2 text-xs md:text-sm uppercase tracking-wide break-words">
                     {label}
                 </label>
                 <div className="relative">
                     <select
                         value={value}
                         onChange={onChange}
-                        className="w-full p-3 font-bold bg-zinc-800 text-white rounded-xl outline-none appearance-none cursor-pointer uppercase text-sm pr-10 hover:bg-zinc-750 focus:ring-2 focus:ring-yellow-500/50 transition-all border border-zinc-700"
+                        className="w-full p-2 md:p-3 font-bold bg-zinc-800 text-white rounded-xl outline-none appearance-none cursor-pointer uppercase text-xs md:text-sm pr-8 md:pr-10 hover:bg-zinc-750 focus:ring-2 focus:ring-yellow-500/50 transition-all border border-zinc-700"
                     >
                         {options}
                     </select>
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-yellow-500">
-                        <ChevronDown size={20} strokeWidth={3} />
+                    <div className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 pointer-events-none text-yellow-500">
+                        <ChevronDown size={18} strokeWidth={3} className="md:w-5 md:h-5" />
                     </div>
                 </div>
             </div>
@@ -540,7 +540,7 @@
             
             return (
                 <span className={`
-                    inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold uppercase border
+                    inline-flex items-center gap-1 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase border
                     ${variants[variant]}
                     ${pulse ? 'badge-pulse relative' : ''}
                 `}>
@@ -586,7 +586,7 @@
                 <div className="max-w-7xl mx-auto px-4 relative">
                     <div className="text-center space-y-6">
                         {/* Trust Badges */}
-                        <div className="flex flex-wrap justify-center gap-3 mb-8 animate-fade-in">
+                        <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 animate-fade-in">
                             <Badge variant="success">
                                 <Lock size={12}/> 100% Anônimo
                             </Badge>
@@ -599,7 +599,7 @@
                         </div>
                         
                         {/* Main Headline - H1 for SEO */}
-                        <h1 className="font-display font-black text-4xl md:text-6xl lg:text-7xl tracking-tight animate-slide-up">
+                        <h1 className="font-display font-black text-3xl md:text-6xl lg:text-7xl tracking-tight animate-slide-up">
                             <span className="text-white">Simulador de</span>
                             <br />
                             <span className="gradient-text">Financiamento de Carro</span>
@@ -607,37 +607,37 @@
                             <span className="text-yellow-500">2025</span>
                         </h1>
                         
-                        <p className="text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto font-body animate-slide-up" style={{animationDelay: '0.1s'}}>
+                        <p className="text-lg md:text-2xl text-zinc-400 max-w-3xl mx-auto font-body animate-slide-up px-4" style={{animationDelay: '0.1s'}}>
                             Compare <strong className="text-white">taxas reais</strong> de todos os bancos e descubra se vale mais a pena 
                             <strong className="text-red-400"> financiamento</strong> ou 
                             <strong className="text-emerald-400"> consórcio</strong> — sem dar seu CPF.
                         </p>
                         
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 animate-slide-up" style={{animationDelay: '0.2s'}}>
-                            <a href="#simulador" className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-black font-black px-8 py-4 rounded-xl neo-brutal-sm transition-all text-lg">
-                                <Calculator size={24}/>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 animate-slide-up px-4" style={{animationDelay: '0.2s'}}>
+                            <a href="#simulador" className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-black font-black px-6 md:px-8 py-3 md:py-4 rounded-xl neo-brutal-sm transition-all text-base md:text-lg">
+                                <Calculator size={20} className="md:w-6 md:h-6"/>
                                 Simular Agora
-                                <ArrowRight size={20}/>
+                                <ArrowRight size={18} className="md:w-5 md:h-5"/>
                             </a>
-                            <a href="#como-funciona" className="inline-flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-8 py-4 rounded-xl border-2 border-zinc-700 transition-all">
-                                <HelpCircle size={20}/>
+                            <a href="#como-funciona" className="inline-flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 md:px-8 py-3 md:py-4 rounded-xl border-2 border-zinc-700 transition-all text-sm md:text-base">
+                                <HelpCircle size={18} className="md:w-5 md:h-5"/>
                                 Como Funciona
                             </a>
                         </div>
                         
                         {/* Stats */}
-                        <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto pt-12 animate-fade-in" style={{animationDelay: '0.4s'}}>
+                        <div className="grid grid-cols-3 gap-2 md:gap-4 max-w-2xl mx-auto pt-12 animate-fade-in px-4" style={{animationDelay: '0.4s'}}>
                             <div className="text-center">
-                                <div className="font-display font-black text-3xl md:text-4xl text-yellow-500">11+</div>
-                                <div className="text-zinc-500 text-sm">Bancos Comparados</div>
+                                <div className="font-display font-black text-2xl md:text-4xl text-yellow-500">11+</div>
+                                <div className="text-zinc-500 text-xs md:text-sm">Bancos Comparados</div>
                             </div>
                             <div className="text-center border-x border-zinc-800">
-                                <div className="font-display font-black text-3xl md:text-4xl text-emerald-500">9+</div>
-                                <div className="text-zinc-500 text-sm">Consórcios</div>
+                                <div className="font-display font-black text-2xl md:text-4xl text-emerald-500">9+</div>
+                                <div className="text-zinc-500 text-xs md:text-sm">Consórcios</div>
                             </div>
                             <div className="text-center">
-                                <div className="font-display font-black text-3xl md:text-4xl text-cyan-500">0</div>
-                                <div className="text-zinc-500 text-sm">CPF Necessário</div>
+                                <div className="font-display font-black text-2xl md:text-4xl text-cyan-500">0</div>
+                                <div className="text-zinc-500 text-xs md:text-sm">CPF Necessário</div>
                             </div>
                         </div>
                     </div>
@@ -653,10 +653,10 @@
                         <Badge variant="info" className="mb-4">
                             <BookOpen size={12}/> Passo a Passo
                         </Badge>
-                        <h2 className="font-display font-black text-3xl md:text-4xl text-white mb-4">
+                        <h2 className="font-display font-black text-2xl md:text-4xl text-white mb-4">
                             Como Usar o Simulador
                         </h2>
-                        <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+                        <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto px-4">
                             Em 3 passos simples você descobre o custo real do seu próximo carro
                         </p>
                     </div>
@@ -665,32 +665,32 @@
                         {[
                             {
                                 step: "01",
-                                icon: <Car size={32}/>,
+                                icon: <Car size={28} className="md:w-8 md:h-8"/>,
                                 title: "Informe os Dados",
                                 desc: "Digite o valor do carro, sua entrada e escolha o banco. Usamos taxas médias reais do Banco Central."
                             },
                             {
                                 step: "02",
-                                icon: <Calculator size={32}/>,
+                                icon: <Calculator size={28} className="md:w-8 md:h-8"/>,
                                 title: "Compare as Opções",
                                 desc: "Veja lado a lado o custo do financiamento vs consórcio. Simule diferentes cenários de lance."
                             },
                             {
                                 step: "03",
-                                icon: <Target size={32}/>,
+                                icon: <Target size={28} className="md:w-8 md:h-8"/>,
                                 title: "Tome sua Decisão",
                                 desc: "Descubra quanto você economiza e baixe um relatório PDF para levar ao banco ou concessionária."
                             },
                         ].map((item, i) => (
                             <div key={i} className="relative group">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-yellow-500/20 to-emerald-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 h-full hover:border-yellow-500/30 transition-colors">
-                                    <div className="text-yellow-500/30 font-display font-black text-6xl absolute top-4 right-4">
+                                <div className="relative bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 h-full hover:border-yellow-500/30 transition-colors">
+                                    <div className="text-yellow-500/30 font-display font-black text-4xl md:text-6xl absolute top-4 right-4">
                                         {item.step}
                                     </div>
                                     <div className="text-yellow-500 mb-4">{item.icon}</div>
-                                    <h3 className="font-display font-bold text-xl text-white mb-2">{item.title}</h3>
-                                    <p className="text-zinc-400">{item.desc}</p>
+                                    <h3 className="font-display font-bold text-lg md:text-xl text-white mb-2">{item.title}</h3>
+                                    <p className="text-zinc-400 text-sm md:text-base">{item.desc}</p>
                                 </div>
                             </div>
                         ))}
@@ -759,10 +759,10 @@
                             <Badge variant="warning" className="mb-4">
                                 <HelpCircle size={12}/> Dúvidas Frequentes
                             </Badge>
-                            <h2 className="font-display font-black text-3xl md:text-4xl text-white mb-4">
+                            <h2 className="font-display font-black text-2xl md:text-4xl text-white mb-4">
                                 Perguntas Frequentes sobre Financiamento
                             </h2>
-                            <p className="text-zinc-400 text-lg">
+                            <p className="text-zinc-400 text-base md:text-lg">
                                 Tudo que você precisa saber antes de financiar ou fazer consórcio de carro
                             </p>
                         </div>
@@ -770,11 +770,11 @@
                         <div className="space-y-3">
                             {faqs.map((faq, i) => (
                                 <details key={i} className="group bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-yellow-500/30 transition-colors">
-                                    <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                                        <span className="font-bold text-white pr-4">{faq.q}</span>
-                                        <ChevronDown size={20} className="text-yellow-500 shrink-0 faq-icon transition-transform" />
+                                    <summary className="flex items-center justify-between p-4 md:p-5 cursor-pointer list-none">
+                                        <span className="font-bold text-white pr-4 text-sm md:text-base">{faq.q}</span>
+                                        <ChevronDown size={18} className="md:w-5 md:h-5 text-yellow-500 shrink-0 faq-icon transition-transform" />
                                     </summary>
-                                    <div className="px-5 pb-5 text-zinc-400 leading-relaxed border-t border-zinc-800 pt-4">
+                                    <div className="px-4 md:px-5 pb-4 md:pb-5 text-zinc-400 leading-relaxed border-t border-zinc-800 pt-4 text-sm md:text-base">
                                         {faq.a}
                                     </div>
                                 </details>
@@ -793,10 +793,10 @@
                         <Badge variant="info" className="mb-4">
                             <BookOpen size={12}/> Aprenda
                         </Badge>
-                        <h2 className="font-display font-black text-3xl md:text-4xl text-white mb-4">
+                        <h2 className="font-display font-black text-2xl md:text-4xl text-white mb-4">
                             Glossário de Financiamento
                         </h2>
-                        <p className="text-zinc-400 text-lg">
+                        <p className="text-zinc-400 text-base md:text-lg">
                             Entenda todos os termos usados pelos bancos
                         </p>
                     </div>
@@ -813,9 +813,9 @@
                             { termo: "Lance Embutido", def: "Usar parte da carta de crédito como lance no consórcio. Máximo geralmente 30%." },
                             { termo: "Carta de Crédito", def: "Valor que você recebe ao ser contemplado no consórcio para comprar o veículo." },
                         ].map((item, i) => (
-                            <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 hover:border-cyan-500/30 transition-colors">
-                                <h3 className="font-display font-bold text-cyan-400 mb-2">{item.termo}</h3>
-                                <p className="text-zinc-400 text-sm">{item.def}</p>
+                            <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 md:p-5 hover:border-cyan-500/30 transition-colors">
+                                <h3 className="font-display font-bold text-cyan-400 mb-2 text-sm md:text-base">{item.termo}</h3>
+                                <p className="text-zinc-400 text-xs md:text-sm">{item.def}</p>
                             </div>
                         ))}
                     </div>
@@ -831,34 +831,34 @@
                         <Badge variant="success" className="mb-4">
                             <Landmark size={12}/> Comparativo 2025
                         </Badge>
-                        <h2 className="font-display font-black text-3xl md:text-4xl text-white mb-4">
+                        <h2 className="font-display font-black text-2xl md:text-4xl text-white mb-4">
                             Taxas de Financiamento por Banco
                         </h2>
-                        <p className="text-zinc-400 text-lg">
+                        <p className="text-zinc-400 text-base md:text-lg">
                             Médias atualizadas com base em dados do Banco Central
                         </p>
                     </div>
                     
                     <div className="overflow-x-auto">
-                        <table className="w-full bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                        <table className="w-full bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden text-sm md:text-base">
                             <thead>
                                 <tr className="bg-zinc-950">
-                                    <th className="text-left p-4 font-display font-bold text-zinc-300">Banco</th>
-                                    <th className="text-center p-4 font-display font-bold text-emerald-400">0KM (% a.m.)</th>
-                                    <th className="text-center p-4 font-display font-bold text-orange-400">Usado (% a.m.)</th>
-                                    <th className="text-center p-4 font-display font-bold text-zinc-400">Destaque</th>
+                                    <th className="text-left p-3 md:p-4 font-display font-bold text-zinc-300">Banco</th>
+                                    <th className="text-center p-3 md:p-4 font-display font-bold text-emerald-400">0KM (% a.m.)</th>
+                                    <th className="text-center p-3 md:p-4 font-display font-bold text-orange-400">Usado (% a.m.)</th>
+                                    <th className="text-center p-3 md:p-4 font-display font-bold text-zinc-400">Destaque</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {Object.entries(TAXAS_BANCOS).map(([key, banco], i) => (
                                     <tr key={key} className={`border-t border-zinc-800 ${banco.destaque ? 'bg-yellow-500/5' : ''} hover:bg-zinc-800/50 transition-colors`}>
-                                        <td className="p-4 font-bold text-white">
+                                        <td className="p-3 md:p-4 font-bold text-white text-xs md:text-base">
                                             {banco.nome}
-                                            {banco.destaque && <Sparkles size={14} className="inline ml-2 text-yellow-500"/>}
+                                            {banco.destaque && <Sparkles size={12} className="md:w-3.5 md:h-3.5 inline ml-2 text-yellow-500"/>}
                                         </td>
-                                        <td className="p-4 text-center font-mono font-bold text-emerald-400">{banco.novo}%</td>
-                                        <td className="p-4 text-center font-mono font-bold text-orange-400">{banco.usado}%</td>
-                                        <td className="p-4 text-center">
+                                        <td className="p-3 md:p-4 text-center font-mono font-bold text-emerald-400">{banco.novo}%</td>
+                                        <td className="p-3 md:p-4 text-center font-mono font-bold text-orange-400">{banco.usado}%</td>
+                                        <td className="p-3 md:p-4 text-center">
                                             {banco.destaque && <Badge variant="warning">Menor Taxa</Badge>}
                                             {banco.novo <= 1.55 && !banco.destaque && <Badge variant="success">Boa Opção</Badge>}
                                         </td>
@@ -868,7 +868,7 @@
                         </table>
                     </div>
                     
-                    <p className="text-center text-zinc-500 text-sm mt-4">
+                    <p className="text-center text-zinc-500 text-xs md:text-sm mt-4">
                         * Taxas são médias de mercado e podem variar conforme seu perfil de crédito
                     </p>
                 </div>
@@ -1102,16 +1102,16 @@
                 <div className="min-h-screen">
                     {/* HEADER */}
                     <header className="sticky top-0 z-50 glass-dark border-b border-zinc-800">
-                        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-yellow-500 text-black p-2 rounded-xl">
-                                    <Swords size={24} strokeWidth={3} />
+                        <div className="max-w-7xl mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2 md:gap-3">
+                                <div className="bg-yellow-500 text-black p-1.5 md:p-2 rounded-xl">
+                                    <Swords size={20} strokeWidth={3} className="md:w-6 md:h-6" />
                                 </div>
                                 <div>
-                                    <h1 className="font-display font-black text-xl md:text-2xl tracking-tight">
+                                    <h1 className="font-display font-black text-lg md:text-2xl tracking-tight">
                                         CUSTO <span className="text-yellow-500">REAL</span>
                                     </h1>
-                                    <p className="text-[10px] md:text-xs text-zinc-500 uppercase tracking-wider hidden sm:block">
+                                    <p className="text-[9px] md:text-xs text-zinc-500 uppercase tracking-wider hidden sm:block">
                                         Simulador de Financiamento
                                     </p>
                                 </div>
@@ -1125,7 +1125,7 @@
                             </nav>
                             
                             <Badge variant="success">
-                                <Shield size={12}/> Sem CPF
+                                <Shield size={10} className="md:w-3 md:h-3"/> Sem CPF
                             </Badge>
                         </div>
                     </header>
@@ -1135,11 +1135,11 @@
 
                     {/* AVISO DE PRIVACIDADE */}
                     <div className="max-w-7xl mx-auto px-4 -mt-8 relative z-10 no-print">
-                        <div className="bg-zinc-900 border border-yellow-500/30 rounded-2xl p-4 flex items-center gap-4">
-                            <div className="bg-yellow-500/20 p-3 rounded-xl shrink-0">
-                                <Lock className="text-yellow-500" size={24}/>
+                        <div className="bg-zinc-900 border border-yellow-500/30 rounded-2xl p-3 md:p-4 flex items-start md:items-center gap-3 md:gap-4">
+                            <div className="bg-yellow-500/20 p-2 md:p-3 rounded-xl shrink-0">
+                                <Lock className="text-yellow-500" size={20} className="md:w-6 md:h-6"/>
                             </div>
-                            <p className="text-sm text-zinc-300">
+                            <p className="text-xs md:text-sm text-zinc-300">
                                 <strong className="text-white">Privacidade Total:</strong> Esta ferramenta não coleta, armazena ou transmite dados pessoais. 
                                 Simule à vontade sem receber ligações de vendedores.
                             </p>
@@ -1147,18 +1147,18 @@
                     </div>
 
                     {/* SIMULADOR PRINCIPAL */}
-                    <section id="simulador" className="py-16 md:py-24">
+                    <section id="simulador" className="py-12 md:py-24">
                         <div className="max-w-7xl mx-auto px-4">
                             
                             {/* ALERTA GLOBAL */}
                             {globalError && (
                                 <div className="mb-8 bg-red-500/20 border-2 border-red-500 text-red-300 font-bold p-4 rounded-xl flex items-center gap-3 animate-bounce-in">
-                                    <Ban size={24} className="text-red-500"/>
-                                    <span>{globalError}</span>
+                                    <Ban size={20} className="md:w-6 md:h-6 text-red-500 shrink-0"/>
+                                    <span className="text-sm md:text-base">{globalError}</span>
                                 </div>
                             )}
 
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
                                 
                                 {/* CONFIGURAÇÕES */}
                                 <div className="lg:col-span-5 space-y-6">
@@ -1167,11 +1167,11 @@
                                     <NeoCard variant="finance" glow>
                                         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-red-500/30">
                                             <div className="bg-red-500 p-2 rounded-xl">
-                                                <Building2 size={24} className="text-white"/>
+                                                <Building2 size={20} className="md:w-6 md:h-6 text-white"/>
                                             </div>
                                             <div>
-                                                <h2 className="font-display font-black text-xl text-white">Financiamento</h2>
-                                                <p className="text-red-400 text-sm">Configure os dados do crédito</p>
+                                                <h2 className="font-display font-black text-lg md:text-xl text-white">Financiamento</h2>
+                                                <p className="text-red-400 text-xs md:text-sm">Configure os dados do crédito</p>
                                             </div>
                                         </div>
 
@@ -1179,23 +1179,23 @@
                                         <div className="flex gap-2 mb-6 p-1 bg-zinc-950 rounded-xl">
                                             <button 
                                                 onClick={() => setTipoVeiculo('novo')}
-                                                className={`flex-1 py-3 font-bold uppercase text-sm rounded-lg transition-all flex items-center justify-center gap-2 ${
+                                                className={`flex-1 py-2 md:py-3 font-bold uppercase text-xs md:text-sm rounded-lg transition-all flex items-center justify-center gap-1.5 md:gap-2 ${
                                                     tipoVeiculo === 'novo' 
                                                         ? 'bg-emerald-500 text-white' 
                                                         : 'text-zinc-500 hover:bg-zinc-800'
                                                 }`}
                                             >
-                                                <Sparkles size={16}/> 0KM
+                                                <Sparkles size={14} className="md:w-4 md:h-4"/><span>0KM</span>
                                             </button>
                                             <button 
                                                 onClick={() => setTipoVeiculo('usado')}
-                                                className={`flex-1 py-3 font-bold uppercase text-sm rounded-lg transition-all flex items-center justify-center gap-2 ${
+                                                className={`flex-1 py-2 md:py-3 font-bold uppercase text-xs md:text-sm rounded-lg transition-all flex items-center justify-center gap-1.5 md:gap-2 ${
                                                     tipoVeiculo === 'usado' 
                                                         ? 'bg-orange-500 text-white' 
                                                         : 'text-zinc-500 hover:bg-zinc-800'
                                                 }`}
                                             >
-                                                <Car size={16}/> Usado
+                                                <Car size={14} className="md:w-4 md:h-4"/><span>Usado</span>
                                             </button>
                                         </div>
 
@@ -1210,12 +1210,12 @@
                                             ))}
                                         />
 
-                                        <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <NeoInput label="Valor do Carro" prefix="R$" value={valorVeiculo} onChange={handleInput(setValorVeiculo)} />
                                             <NeoInput label="Sua Entrada" prefix="R$" value={entrada} onChange={handleInput(setEntrada)} />
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <NeoSelect
                                                 label="Prazo"
                                                 value={parcelas}
@@ -1241,7 +1241,7 @@
                                         </button>
                                         
                                         {mostrarCustosDetalhados && (
-                                            <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-zinc-700">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-zinc-700">
                                                 <NeoInput label="TAC" prefix="R$" value={tac} onChange={handleInput(setTac)} />
                                                 <NeoInput label="Gravame" prefix="R$" value={gravame} onChange={handleInput(setGravame)} />
                                             </div>
@@ -1252,11 +1252,11 @@
                                     <NeoCard variant="consorcio" glow>
                                         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-emerald-500/30">
                                             <div className="bg-emerald-500 p-2 rounded-xl">
-                                                <Crown size={24} className="text-white"/>
+                                                <Crown size={20} className="md:w-6 md:h-6 text-white"/>
                                             </div>
                                             <div>
-                                                <h2 className="font-display font-black text-xl text-white">Consórcio</h2>
-                                                <p className="text-emerald-400 text-sm">Compare com esta alternativa</p>
+                                                <h2 className="font-display font-black text-lg md:text-xl text-white">Consórcio</h2>
+                                                <p className="text-emerald-400 text-xs md:text-sm">Compare com esta alternativa</p>
                                             </div>
                                         </div>
 
@@ -1271,27 +1271,27 @@
                                             ))}
                                         />
 
-                                        <div className="grid grid-cols-3 gap-3">
+                                        <div className="grid grid-cols-3 gap-2 md:gap-3">
                                             <NeoInput label="Taxa Adm" prefix="%" value={taxaAdmin} onChange={handleInput(setTaxaAdmin)} />
                                             <NeoInput label="Fundo" prefix="%" value={fundoReserva} onChange={handleInput(setFundoReserva)} />
                                             <NeoInput label="Prazo" prefix="M" value={prazoConsorcio} onChange={handleInput(setPrazoConsorcio)} />
                                         </div>
 
                                         {/* ESTRATÉGIA DE LANCE */}
-                                        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mt-4">
+                                        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3 md:p-4 mt-4">
                                             <div className="flex items-center gap-2 mb-4">
-                                                <Target className="text-yellow-500" size={20}/>
-                                                <span className="font-display font-bold text-yellow-500">Estratégia de Lance</span>
+                                                <Target className="text-yellow-500" size={18} className="md:w-5 md:h-5"/>
+                                                <span className="font-display font-bold text-yellow-500 text-sm md:text-base">Estratégia de Lance</span>
                                             </div>
                                             
-                                            <label className="flex items-center gap-3 mb-4 cursor-pointer group">
+                                            <label className="flex items-start md:items-center gap-3 mb-4 cursor-pointer group">
                                                 <input 
                                                     type="checkbox" 
                                                     checked={usarEntradaComoLance} 
                                                     onChange={(e) => setUsarEntradaComoLance(e.target.checked)}
-                                                    className="w-5 h-5 rounded bg-zinc-800 border-2 border-zinc-600 checked:bg-yellow-500 checked:border-yellow-500 cursor-pointer"
+                                                    className="w-5 h-5 rounded bg-zinc-800 border-2 border-zinc-600 checked:bg-yellow-500 checked:border-yellow-500 cursor-pointer shrink-0 mt-0.5 md:mt-0"
                                                 />
-                                                <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">
+                                                <span className="text-xs md:text-sm text-zinc-300 group-hover:text-white transition-colors">
                                                     Usar entrada ({formatarMoeda(entrada)}) como lance
                                                 </span>
                                             </label>
@@ -1307,7 +1307,7 @@
                                             <div className="flex gap-2 mt-4">
                                                 <button
                                                     onClick={() => setTipoAbatimento('parcela')}
-                                                    className={`flex-1 p-3 text-xs font-bold uppercase rounded-lg transition-all ${
+                                                    className={`flex-1 p-2 md:p-3 text-[10px] md:text-xs font-bold uppercase rounded-lg transition-all ${
                                                         tipoAbatimento === 'parcela' 
                                                             ? 'bg-yellow-500 text-black' 
                                                             : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
@@ -1317,7 +1317,7 @@
                                                 </button>
                                                 <button
                                                     onClick={() => setTipoAbatimento('prazo')}
-                                                    className={`flex-1 p-3 text-xs font-bold uppercase rounded-lg transition-all ${
+                                                    className={`flex-1 p-2 md:p-3 text-[10px] md:text-xs font-bold uppercase rounded-lg transition-all ${
                                                         tipoAbatimento === 'prazo' 
                                                             ? 'bg-yellow-500 text-black' 
                                                             : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
@@ -1338,32 +1338,32 @@
                                         {/* RESULTADO FINANCIAMENTO */}
                                         <div className="relative group">
                                             <div className="absolute -inset-1 bg-gradient-to-r from-red-500/30 to-orange-500/30 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
-                                            <div className="relative bg-zinc-900 border-2 border-red-500/50 rounded-2xl p-6 h-full flex flex-col">
+                                            <div className="relative bg-zinc-900 border-2 border-red-500/50 rounded-2xl p-5 md:p-6 h-full flex flex-col">
                                                 
                                                 <Badge variant="danger" className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                                    <Zap size={12}/> Imediato
+                                                    <Zap size={10} className="md:w-3 md:h-3"/> Imediato
                                                 </Badge>
                                                 
-                                                <h3 className="text-center font-display font-black text-2xl text-white mt-4 mb-6">
+                                                <h3 className="text-center font-display font-black text-xl md:text-2xl text-white mt-4 mb-6">
                                                     Financiamento
                                                 </h3>
 
                                                 <div className="flex-grow space-y-6">
                                                     <div className="text-center">
-                                                        <p className="text-zinc-500 text-sm uppercase font-bold mb-2">Parcela Mensal</p>
-                                                        <p className="font-mono font-black text-4xl md:text-5xl text-red-500">
+                                                        <p className="text-zinc-500 text-xs md:text-sm uppercase font-bold mb-2">Parcela Mensal</p>
+                                                        <p className="font-mono font-black text-3xl md:text-5xl text-red-500">
                                                             {formatarMoeda(resultado.financiamento.parcela)}
                                                         </p>
-                                                        <p className="text-zinc-400 mt-2">{parcelas}x meses</p>
+                                                        <p className="text-zinc-400 mt-2 text-sm md:text-base">{parcelas}x meses</p>
                                                     </div>
 
-                                                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-center">
-                                                        <p className="text-red-400 text-sm font-bold uppercase mb-1">Juros Pagos</p>
-                                                        <p className="font-mono font-black text-2xl text-red-400">
+                                                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 md:p-4 text-center">
+                                                        <p className="text-red-400 text-xs md:text-sm font-bold uppercase mb-1">Juros Pagos</p>
+                                                        <p className="font-mono font-black text-xl md:text-2xl text-red-400">
                                                             {formatarMoeda(resultado.financiamento.totalJuros)}
                                                         </p>
-                                                        <div className="flex items-center justify-center gap-2 mt-2 text-xs text-zinc-500">
-                                                            <Info size={12}/>
+                                                        <div className="flex items-center justify-center gap-2 mt-2 text-[10px] md:text-xs text-zinc-500">
+                                                            <Info size={10} className="md:w-3 md:h-3"/>
                                                             CET: {formatarCET(resultado.financiamento.cetAnual)}
                                                         </div>
                                                     </div>
@@ -1371,7 +1371,7 @@
 
                                                 <div className="mt-6 pt-6 border-t border-red-500/30 text-center">
                                                     <p className="text-zinc-500 text-xs uppercase font-bold mb-2">Custo Total</p>
-                                                    <p className="font-display font-black text-3xl text-white">
+                                                    <p className="font-display font-black text-2xl md:text-3xl text-white">
                                                         {formatarMoeda(resultado.financiamento.custoTotalAquisicao)}
                                                     </p>
                                                 </div>
@@ -1381,43 +1381,43 @@
                                         {/* RESULTADO CONSÓRCIO */}
                                         <div className="relative group">
                                             <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/30 to-cyan-500/30 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
-                                            <div className="relative bg-zinc-900 border-2 border-emerald-500/50 rounded-2xl p-6 h-full flex flex-col">
+                                            <div className="relative bg-zinc-900 border-2 border-emerald-500/50 rounded-2xl p-5 md:p-6 h-full flex flex-col">
                                                 
                                                 <Badge variant="success" className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                                    <Clock size={12}/> Planejado
+                                                    <Clock size={10} className="md:w-3 md:h-3"/> Planejado
                                                 </Badge>
                                                 
-                                                <h3 className="text-center font-display font-black text-2xl text-white mt-4 mb-6">
+                                                <h3 className="text-center font-display font-black text-xl md:text-2xl text-white mt-4 mb-6">
                                                     Consórcio
                                                 </h3>
 
                                                 <div className="flex-grow space-y-6">
                                                     <div className="text-center">
-                                                        <p className="text-zinc-500 text-sm uppercase font-bold mb-2">
+                                                        <p className="text-zinc-500 text-xs md:text-sm uppercase font-bold mb-2">
                                                             Parcela Pós-Lance
                                                         </p>
-                                                        <p className="font-mono font-black text-4xl md:text-5xl text-emerald-500">
+                                                        <p className="font-mono font-black text-3xl md:text-5xl text-emerald-500">
                                                             {formatarMoeda(resultado.consorcio.parcelaPosLance)}
                                                         </p>
                                                         {resultado.consorcio.pctReducao > 0 && tipoAbatimento === 'parcela' && (
                                                             <Badge variant="success" className="mt-2">
-                                                                <TrendingDown size={12}/> -{resultado.consorcio.pctReducao.toFixed(1)}%
+                                                                <TrendingDown size={10} className="md:w-3 md:h-3"/> -{resultado.consorcio.pctReducao.toFixed(1)}%
                                                             </Badge>
                                                         )}
-                                                        <p className="text-zinc-400 mt-2">
+                                                        <p className="text-zinc-400 mt-2 text-sm md:text-base">
                                                             {tipoAbatimento === 'parcela' ? prazoConsorcio : resultado.consorcio.prazoPosLance}x meses
                                                         </p>
                                                     </div>
 
                                                     {resultado.consorcio.totalLance > 0 && (
-                                                        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4">
+                                                        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 md:p-4">
                                                             <div className="flex items-center justify-center gap-2 mb-2">
-                                                                <BarChart3 size={16} className="text-emerald-400"/>
+                                                                <BarChart3 size={14} className="md:w-4 md:h-4 text-emerald-400"/>
                                                                 <Badge variant={resultado.consorcio.chanceVariant}>
                                                                     Chance: {resultado.consorcio.chanceLabel} ({formatarPorcentagem(resultado.consorcio.percentualTotalLance)})
                                                                 </Badge>
                                                             </div>
-                                                            <div className="grid grid-cols-2 gap-2 text-xs">
+                                                            <div className="grid grid-cols-2 gap-2 text-[10px] md:text-xs">
                                                                 <div className="flex justify-between text-zinc-400">
                                                                     <span>Livre:</span>
                                                                     <span className="text-white">{formatarMoeda(resultado.consorcio.lanceLivreValor)}</span>
@@ -1430,15 +1430,15 @@
                                                         </div>
                                                     )}
 
-                                                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3 text-xs text-yellow-400 flex items-start gap-2">
-                                                        <Info size={14} className="shrink-0 mt-0.5"/>
+                                                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-2 md:p-3 text-[10px] md:text-xs text-yellow-400 flex items-start gap-2">
+                                                        <Info size={12} className="md:w-3.5 md:h-3.5 shrink-0 mt-0.5"/>
                                                         <span>Simulação não garante contemplação. Consulte a administradora.</span>
                                                     </div>
                                                 </div>
 
                                                 <div className="mt-6 pt-6 border-t border-emerald-500/30 text-center">
                                                     <p className="text-zinc-500 text-xs uppercase font-bold mb-2">Custo Total</p>
-                                                    <p className="font-display font-black text-3xl text-white">
+                                                    <p className="font-display font-black text-2xl md:text-3xl text-white">
                                                         {formatarMoeda(resultado.consorcio.custoTotalAquisicao)}
                                                     </p>
                                                 </div>
@@ -1449,23 +1449,23 @@
                                     {/* BOTÃO DOWNLOAD */}
                                     <button
                                         onClick={handleDownloadPDF}
-                                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black p-4 rounded-xl neo-brutal-sm flex items-center justify-center gap-3 uppercase transition-all no-print"
+                                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black p-3 md:p-4 rounded-xl neo-brutal-sm flex items-center justify-center gap-2 md:gap-3 uppercase transition-all no-print text-sm md:text-base"
                                     >
-                                        <Download size={24}/> Baixar Relatório PDF
+                                        <Download size={20} className="md:w-6 md:h-6"/> Baixar Relatório PDF
                                     </button>
 
                                     {/* ECONOMIA CARD */}
                                     <NeoCard variant="highlight" glow className="text-center">
-                                        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                                            <div className="flex items-center gap-4">
-                                                <div className="bg-yellow-500 p-4 rounded-2xl">
-                                                    <Wallet size={32} className="text-black"/>
+                                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+                                            <div className="flex items-center gap-3 md:gap-4">
+                                                <div className="bg-yellow-500 p-3 md:p-4 rounded-2xl">
+                                                    <Wallet size={24} className="md:w-8 md:h-8 text-black"/>
                                                 </div>
                                                 <div className="text-left">
-                                                    <h4 className="font-display font-black text-xl text-white">
+                                                    <h4 className="font-display font-black text-base md:text-xl text-white">
                                                         {economia >= 0 ? "Economia Real" : "Melhor Opção: Financiamento"}
                                                     </h4>
-                                                    <p className="text-zinc-400 text-sm">
+                                                    <p className="text-zinc-400 text-xs md:text-sm">
                                                         {economia >= 0 
                                                             ? "Quanto você economiza escolhendo consórcio" 
                                                             : "Neste cenário, financiar sai mais barato"
@@ -1473,15 +1473,15 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div className={`font-mono font-black text-4xl md:text-5xl ${economia >= 0 ? 'text-emerald-400' : 'text-cyan-400'}`}>
+                                            <div className={`font-mono font-black text-3xl md:text-5xl ${economia >= 0 ? 'text-emerald-400' : 'text-cyan-400'}`}>
                                                 {formatarMoeda(valorDiferenca)}
                                             </div>
                                         </div>
                                     </NeoCard>
 
                                     {/* AD SLOT */}
-                                    <div className="ad-slot rounded-xl no-print">
-                                        <span>Publicidade</span>
+                                    <div className="ad-slot rounded-xl no-print min-h-[80px] md:min-h-[100px]">
+                                        <span className="text-[10px] md:text-xs">Publicidade</span>
                                     </div>
                                 </div>
                             </div>
@@ -1493,8 +1493,8 @@
 
                     {/* AD SLOT */}
                     <div className="max-w-7xl mx-auto px-4 no-print">
-                        <div className="ad-slot rounded-xl">
-                            <span>Publicidade</span>
+                        <div className="ad-slot rounded-xl min-h-[80px] md:min-h-[100px]">
+                            <span className="text-[10px] md:text-xs">Publicidade</span>
                         </div>
                     </div>
 
@@ -1508,55 +1508,55 @@
                     <FAQSection />
 
                     {/* FOOTER */}
-                    <footer className="bg-zinc-950 border-t border-zinc-800 py-12 no-print">
+                    <footer className="bg-zinc-950 border-t border-zinc-800 py-8 md:py-12 no-print">
                         <div className="max-w-7xl mx-auto px-4">
-                            <div className="grid md:grid-cols-4 gap-8 mb-8">
+                            <div className="grid md:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-8">
                                 <div>
                                     <div className="flex items-center gap-2 mb-4">
-                                        <div className="bg-yellow-500 p-2 rounded-xl">
-                                            <Swords size={20} className="text-black"/>
+                                        <div className="bg-yellow-500 p-1.5 md:p-2 rounded-xl">
+                                            <Swords size={18} className="md:w-5 md:h-5 text-black"/>
                                         </div>
-                                        <span className="font-display font-black text-xl">CUSTO REAL</span>
+                                        <span className="font-display font-black text-lg md:text-xl">CUSTO REAL</span>
                                     </div>
-                                    <p className="text-zinc-500 text-sm">
+                                    <p className="text-zinc-500 text-xs md:text-sm">
                                         O simulador de financiamento mais honesto do Brasil. Sem CPF, sem vendedores, sem enrolação.
                                     </p>
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-white mb-4">Simulador</h4>
-                                    <ul className="space-y-2 text-sm text-zinc-500">
+                                    <h4 className="font-bold text-white mb-4 text-sm md:text-base">Simulador</h4>
+                                    <ul className="space-y-2 text-xs md:text-sm text-zinc-500">
                                         <li><a href="#simulador" className="hover:text-yellow-500 transition-colors">Simular Financiamento</a></li>
                                         <li><a href="#simulador" className="hover:text-yellow-500 transition-colors">Simular Consórcio</a></li>
                                         <li><a href="#comparativo" className="hover:text-yellow-500 transition-colors">Comparar Bancos</a></li>
                                     </ul>
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-white mb-4">Aprenda</h4>
-                                    <ul className="space-y-2 text-sm text-zinc-500">
+                                    <h4 className="font-bold text-white mb-4 text-sm md:text-base">Aprenda</h4>
+                                    <ul className="space-y-2 text-xs md:text-sm text-zinc-500">
                                         <li><a href="#como-funciona" className="hover:text-yellow-500 transition-colors">Como Funciona</a></li>
                                         <li><a href="#glossario" className="hover:text-yellow-500 transition-colors">Glossário</a></li>
                                         <li><a href="#faq" className="hover:text-yellow-500 transition-colors">Perguntas Frequentes</a></li>
                                     </ul>
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-white mb-4">Aviso Legal</h4>
-                                    <p className="text-xs text-zinc-600 leading-relaxed">
+                                    <h4 className="font-bold text-white mb-4 text-sm md:text-base">Aviso Legal</h4>
+                                    <p className="text-[10px] md:text-xs text-zinc-600 leading-relaxed">
                                         Esta ferramenta é apenas para simulação e comparação. Não representa proposta oficial de crédito. 
                                         Taxas reais dependem do seu perfil e análise de crédito pelo banco/administradora.
                                     </p>
                                 </div>
                             </div>
                             
-                            <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                                <p className="text-xs text-zinc-600">
+                            <div className="border-t border-zinc-800 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                                <p className="text-[10px] md:text-xs text-zinc-600 text-center md:text-left">
                                     © {new Date().getFullYear()} Custo Real Auto. Todos os direitos reservados.
                                 </p>
                                 <div className="flex items-center gap-2">
                                     <Badge variant="info">
-                                        <Shield size={10}/> 100% Anônimo
+                                        <Shield size={8} className="md:w-2.5 md:h-2.5"/> 100% Anônimo
                                     </Badge>
                                     <Badge variant="success">
-                                        <BadgeCheck size={10}/> Dados BC
+                                        <BadgeCheck size={8} className="md:w-2.5 md:h-2.5"/> Dados BC
                                     </Badge>
                                 </div>
                             </div>
