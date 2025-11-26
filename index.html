@@ -1394,7 +1394,7 @@
                                                 <div className="flex-grow space-y-6">
                                                     <div className="text-center">
                                                         <p className="text-zinc-500 text-xs md:text-sm uppercase font-bold mb-2">
-                                                            Parcela Pós-Lance
+                                                            Parcela (Se Contemplado)
                                                         </p>
                                                         <p className="font-mono font-black text-3xl md:text-5xl text-emerald-500">
                                                             {formatarMoeda(resultado.consorcio.parcelaPosLance)}
@@ -1411,13 +1411,19 @@
 
                                                     {resultado.consorcio.totalLance > 0 && (
                                                         <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 md:p-4">
-                                                            <div className="flex items-center justify-center gap-2 mb-2">
-                                                                <BarChart3 size={14} className="md:w-4 md:h-4 text-emerald-400"/>
+                                                            <div className="flex flex-col items-center gap-2 mb-3">
+                                                                <div className="flex items-center gap-2">
+                                                                    <BarChart3 size={14} className="md:w-4 md:h-4 text-emerald-400"/>
+                                                                    <span className="text-xs md:text-sm font-bold text-emerald-400">Seu Lance Total</span>
+                                                                </div>
                                                                 <Badge variant={resultado.consorcio.chanceVariant}>
-                                                                    Chance: {resultado.consorcio.chanceLabel} ({formatarPorcentagem(resultado.consorcio.percentualTotalLance)})
+                                                                    Chance de Contemplação: {resultado.consorcio.chanceLabel} ({formatarPorcentagem(resultado.consorcio.percentualTotalLance)})
                                                                 </Badge>
+                                                                <p className="text-[9px] md:text-[10px] text-zinc-500 text-center px-2">
+                                                                    Quanto maior o lance, maior a chance de ser sorteado e receber a carta
+                                                                </p>
                                                             </div>
-                                                            <div className="grid grid-cols-2 gap-2 text-[10px] md:text-xs">
+                                                            <div className="grid grid-cols-2 gap-2 text-[10px] md:text-xs pt-2 border-t border-emerald-500/20">
                                                                 <div className="flex justify-between text-zinc-400">
                                                                     <span>Livre:</span>
                                                                     <span className="text-white">{formatarMoeda(resultado.consorcio.lanceLivreValor)}</span>
@@ -1432,7 +1438,9 @@
 
                                                     <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-2 md:p-3 text-[10px] md:text-xs text-yellow-400 flex items-start gap-2">
                                                         <Info size={12} className="md:w-3.5 md:h-3.5 shrink-0 mt-0.5"/>
-                                                        <span>Simulação não garante contemplação. Consulte a administradora.</span>
+                                                        <p>
+                                                            <strong>⚠️ Importante:</strong> Você só recebe o carro após ser <strong>contemplado</strong> (por sorteio ou lance)
+                                                        </p>
                                                     </div>
                                                 </div>
 
